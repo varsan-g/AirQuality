@@ -94,16 +94,11 @@ class _SignInWidgetState extends State<SignInWidget> {
                                     ),
                                   if (Theme.of(context).brightness ==
                                       Brightness.light)
-                                    Align(
-                                      alignment:
-                                          const AlignmentDirectional(-1.0, 0.0),
-                                      child: Image.asset(
-                                        'assets/images/Black_And_White_Aesthetic_Minimalist_Modern_Simple_Typography_Coconut_Cosmetics_Logo.png',
-                                        width: 195.0,
-                                        height: 60.0,
-                                        fit: BoxFit.fitWidth,
-                                        alignment: const Alignment(-1.0, 0.0),
-                                      ),
+                                    Image.asset(
+                                      'assets/images/Black_And_White_Aesthetic_Minimalist_Modern_Simple_Typography_Coconut_Cosmetics_Logo_(1).png',
+                                      width: 150.0,
+                                      height: 55.0,
+                                      fit: BoxFit.fitWidth,
                                     ),
                                 ],
                               ),
@@ -438,13 +433,48 @@ class _SignInWidgetState extends State<SignInWidget> {
                                           true)) {
                                         GoRouter.of(context).prepareAuthEvent();
                                         await authManager.signIn(
-                                          authenticationToken: LoginCall.token(
-                                            (_model.authResponse?.jsonBody ??
+                                          authenticationToken:
+                                              valueOrDefault<String>(
+                                            (_model.authResponse?.getHeader(
+                                                    'Authorization') ??
                                                 ''),
+                                            'testAuthLogIn',
                                           ),
                                         );
                                         navigate = () => context.goNamedAuth(
                                             'homePage', context.mounted);
+                                        FFAppState().token =
+                                            valueOrDefault<String>(
+                                          (_model.authResponse?.getHeader(
+                                                  'Authorization') ??
+                                              ''),
+                                          'lol',
+                                        );
+                                        FFAppState().update(() {});
+                                        await showDialog(
+                                          context: context,
+                                          builder: (alertDialogContext) {
+                                            return AlertDialog(
+                                              title:
+                                                  const Text('Header token received'),
+                                              content:
+                                                  Text(valueOrDefault<String>(
+                                                (_model.authResponse?.getHeader(
+                                                        'Authorization') ??
+                                                    ''),
+                                                'none',
+                                              )),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          alertDialogContext),
+                                                  child: const Text('Ok'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
                                       } else {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(

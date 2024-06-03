@@ -151,9 +151,10 @@ class _GraphPageWidgetState extends State<GraphPageWidget> {
                       fillColor:
                           FlutterFlowTheme.of(context).secondaryBackground,
                       elevation: 2.0,
-                      borderColor: FlutterFlowTheme.of(context).alternate,
+                      borderColor:
+                          FlutterFlowTheme.of(context).primaryBackground,
                       borderWidth: 2.0,
-                      borderRadius: 16.0,
+                      borderRadius: 50.0,
                       margin:
                           const EdgeInsetsDirectional.fromSTEB(16.0, 4.0, 16.0, 4.0),
                       hidesUnderline: true,
@@ -200,7 +201,7 @@ class _GraphPageWidgetState extends State<GraphPageWidget> {
                                   padding: const EdgeInsetsDirectional.fromSTEB(
                                       4.0, 4.0, 8.0, 4.0),
                                   child: Container(
-                                    height: 272.0,
+                                    height: 400.0,
                                     constraints: BoxConstraints(
                                       maxWidth:
                                           MediaQuery.sizeOf(context).width *
@@ -281,74 +282,84 @@ class _GraphPageWidgetState extends State<GraphPageWidget> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,
                                               children: [
-                                                SizedBox(
-                                                  width: 370.0,
-                                                  height: 200.0,
-                                                  child: FlutterFlowLineChart(
-                                                    data: [
-                                                      FFLineChartData(
-                                                        xData: List.generate(
-                                                                random_data
-                                                                    .randomInteger(
-                                                                        7, 7),
-                                                                (index) =>
-                                                                    random_data
-                                                                        .randomDate())
-                                                            .sortedList((e) =>
-                                                                dateTimeFormat(
-                                                                    'd/M', e)),
-                                                        yData: List.generate(
-                                                            random_data
-                                                                .randomInteger(
-                                                                    7, 7),
-                                                            (index) => random_data
-                                                                .randomDouble(
-                                                                    300.0,
-                                                                    1000.0)).sortedList(
-                                                            (e) => formatNumber(
-                                                                  e,
-                                                                  formatType:
-                                                                      FormatType
-                                                                          .decimal,
-                                                                  decimalType:
-                                                                      DecimalType
-                                                                          .automatic,
-                                                                )),
-                                                        settings:
-                                                            LineChartBarData(
-                                                          color:
-                                                              const Color(0xFF76C7C0),
-                                                          barWidth: 1.0,
-                                                          isCurved: true,
-                                                          preventCurveOverShooting:
-                                                              true,
-                                                          dotData: FlDotData(
-                                                              show: false),
-                                                          belowBarData:
-                                                              BarAreaData(
-                                                            show: true,
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 14.0,
+                                                                0.0, 0.0),
+                                                    child: FlutterFlowLineChart(
+                                                      data: [
+                                                        FFLineChartData(
+                                                          xData: List.generate(
+                                                                  random_data
+                                                                      .randomInteger(
+                                                                          24,
+                                                                          24),
+                                                                  (index) =>
+                                                                      random_data
+                                                                          .randomDate())
+                                                              .sortedList(),
+                                                          yData: List.generate(
+                                                              random_data
+                                                                  .randomInteger(
+                                                                      24, 24),
+                                                              (index) => random_data
+                                                                  .randomInteger(
+                                                                      400,
+                                                                      700)),
+                                                          settings:
+                                                              LineChartBarData(
                                                             color: const Color(
-                                                                0xB3BDE4E6),
+                                                                0xFF76C7C0),
+                                                            barWidth: 1.0,
+                                                            isCurved: true,
+                                                            preventCurveOverShooting:
+                                                                true,
+                                                            belowBarData:
+                                                                BarAreaData(
+                                                              show: true,
+                                                              color: const Color(
+                                                                  0xB3BDE4E6),
+                                                            ),
                                                           ),
+                                                        )
+                                                      ],
+                                                      chartStylingInfo:
+                                                          ChartStylingInfo(
+                                                        enableTooltip: true,
+                                                        backgroundColor:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryBackground,
+                                                        borderColor:
+                                                            const Color(0xFFC3C3C3),
+                                                        borderWidth: 1.0,
+                                                      ),
+                                                      axisBounds: const AxisBounds(
+                                                        minY: 300.0,
+                                                        maxY: 800.0,
+                                                      ),
+                                                      xAxisLabelInfo:
+                                                          const AxisLabelInfo(
+                                                        title: '24-timer',
+                                                        titleTextStyle:
+                                                            TextStyle(
+                                                          fontSize: 14.0,
                                                         ),
-                                                      )
-                                                    ],
-                                                    chartStylingInfo:
-                                                        ChartStylingInfo(
-                                                      backgroundColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondaryBackground,
-                                                      showBorder: false,
-                                                    ),
-                                                    axisBounds: const AxisBounds(),
-                                                    xAxisLabelInfo:
-                                                        const AxisLabelInfo(
-                                                      reservedSize: 32.0,
-                                                    ),
-                                                    yAxisLabelInfo:
-                                                        const AxisLabelInfo(
-                                                      reservedSize: 40.0,
+                                                        reservedSize: 32.0,
+                                                      ),
+                                                      yAxisLabelInfo:
+                                                          const AxisLabelInfo(
+                                                        title: 'CO2',
+                                                        titleTextStyle:
+                                                            TextStyle(
+                                                          fontSize: 14.0,
+                                                        ),
+                                                        showLabels: true,
+                                                        labelInterval: 100.0,
+                                                        reservedSize: 40.0,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -371,7 +382,7 @@ class _GraphPageWidgetState extends State<GraphPageWidget> {
                                   padding: const EdgeInsetsDirectional.fromSTEB(
                                       4.0, 4.0, 8.0, 4.0),
                                   child: Container(
-                                    height: 272.0,
+                                    height: 400.0,
                                     constraints: BoxConstraints(
                                       maxWidth:
                                           MediaQuery.sizeOf(context).width *
@@ -452,74 +463,85 @@ class _GraphPageWidgetState extends State<GraphPageWidget> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,
                                               children: [
-                                                SizedBox(
-                                                  width: 370.0,
-                                                  height: 200.0,
-                                                  child: FlutterFlowLineChart(
-                                                    data: [
-                                                      FFLineChartData(
-                                                        xData: List.generate(
-                                                                random_data
-                                                                    .randomInteger(
-                                                                        7, 7),
-                                                                (index) =>
-                                                                    random_data
-                                                                        .randomDate())
-                                                            .sortedList((e) =>
-                                                                dateTimeFormat(
-                                                                    'd/M', e)),
-                                                        yData: List.generate(
-                                                            random_data
-                                                                .randomInteger(
-                                                                    7, 7),
-                                                            (index) => random_data
-                                                                .randomInteger(
-                                                                    18,
-                                                                    27)).sortedList(
-                                                            (e) => formatNumber(
-                                                                  e,
-                                                                  formatType:
-                                                                      FormatType
-                                                                          .decimal,
-                                                                  decimalType:
-                                                                      DecimalType
-                                                                          .automatic,
-                                                                )),
-                                                        settings:
-                                                            LineChartBarData(
-                                                          color:
-                                                              const Color(0xFFE07A5F),
-                                                          barWidth: 1.0,
-                                                          isCurved: true,
-                                                          preventCurveOverShooting:
-                                                              true,
-                                                          dotData: FlDotData(
-                                                              show: false),
-                                                          belowBarData:
-                                                              BarAreaData(
-                                                            show: true,
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 14.0,
+                                                                0.0, 0.0),
+                                                    child: FlutterFlowLineChart(
+                                                      data: [
+                                                        FFLineChartData(
+                                                          xData: List.generate(
+                                                                  random_data
+                                                                      .randomInteger(
+                                                                          24,
+                                                                          24),
+                                                                  (index) =>
+                                                                      random_data
+                                                                          .randomDate())
+                                                              .sortedList(),
+                                                          yData: List.generate(
+                                                              random_data
+                                                                  .randomInteger(
+                                                                      24, 24),
+                                                              (index) => random_data
+                                                                  .randomInteger(
+                                                                      22, 27)),
+                                                          settings:
+                                                              LineChartBarData(
                                                             color: const Color(
-                                                                0xB2F4A261),
+                                                                0xFFE07A5F),
+                                                            barWidth: 1.0,
+                                                            isCurved: true,
+                                                            preventCurveOverShooting:
+                                                                true,
+                                                            belowBarData:
+                                                                BarAreaData(
+                                                              show: true,
+                                                              color: const Color(
+                                                                  0xB2F4A261),
+                                                            ),
                                                           ),
+                                                        )
+                                                      ],
+                                                      chartStylingInfo:
+                                                          ChartStylingInfo(
+                                                        enableTooltip: true,
+                                                        tooltipBackgroundColor:
+                                                            Colors.white,
+                                                        backgroundColor:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryBackground,
+                                                        borderColor:
+                                                            const Color(0xFFC3C3C3),
+                                                        borderWidth: 1.0,
+                                                      ),
+                                                      axisBounds: const AxisBounds(
+                                                        minY: 10.0,
+                                                        maxY: 35.0,
+                                                      ),
+                                                      xAxisLabelInfo:
+                                                          const AxisLabelInfo(
+                                                        title: '24-timer',
+                                                        titleTextStyle:
+                                                            TextStyle(
+                                                          fontSize: 14.0,
                                                         ),
-                                                      )
-                                                    ],
-                                                    chartStylingInfo:
-                                                        ChartStylingInfo(
-                                                      backgroundColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondaryBackground,
-                                                      showBorder: false,
-                                                    ),
-                                                    axisBounds: const AxisBounds(),
-                                                    xAxisLabelInfo:
-                                                        const AxisLabelInfo(
-                                                      reservedSize: 32.0,
-                                                    ),
-                                                    yAxisLabelInfo:
-                                                        const AxisLabelInfo(
-                                                      reservedSize: 40.0,
+                                                        reservedSize: 32.0,
+                                                      ),
+                                                      yAxisLabelInfo:
+                                                          const AxisLabelInfo(
+                                                        title: 'Temperatur',
+                                                        titleTextStyle:
+                                                            TextStyle(
+                                                          fontSize: 14.0,
+                                                        ),
+                                                        showLabels: true,
+                                                        labelInterval: 5.0,
+                                                        reservedSize: 40.0,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
@@ -542,7 +564,7 @@ class _GraphPageWidgetState extends State<GraphPageWidget> {
                                   padding: const EdgeInsetsDirectional.fromSTEB(
                                       4.0, 4.0, 8.0, 4.0),
                                   child: Container(
-                                    height: 272.0,
+                                    height: 400.0,
                                     constraints: BoxConstraints(
                                       maxWidth:
                                           MediaQuery.sizeOf(context).width *
@@ -623,71 +645,97 @@ class _GraphPageWidgetState extends State<GraphPageWidget> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.end,
                                               children: [
-                                                SizedBox(
-                                                  width: 370.0,
-                                                  height: 200.0,
-                                                  child: FlutterFlowLineChart(
-                                                    data: [
-                                                      FFLineChartData(
-                                                        xData: List.generate(
-                                                                random_data
-                                                                    .randomInteger(
-                                                                        7, 7),
-                                                                (index) =>
-                                                                    random_data
-                                                                        .randomDate())
-                                                            .sortedList((e) =>
-                                                                dateTimeFormat(
-                                                                    'd/M', e)),
-                                                        yData: List.generate(
-                                                            random_data
-                                                                .randomInteger(
-                                                                    7, 7),
-                                                            (index) => random_data
-                                                                .randomInteger(
-                                                                    30,
-                                                                    80)).sortedList(
-                                                            (e) => formatNumber(
-                                                                  e,
-                                                                  formatType:
-                                                                      FormatType
-                                                                          .percent,
-                                                                )),
-                                                        settings:
-                                                            LineChartBarData(
-                                                          color:
-                                                              const Color(0xFF9B5DE5),
-                                                          barWidth: 1.0,
-                                                          isCurved: true,
-                                                          preventCurveOverShooting:
-                                                              true,
-                                                          dotData: FlDotData(
-                                                              show: false),
-                                                          belowBarData:
-                                                              BarAreaData(
-                                                            show: true,
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 14.0,
+                                                                0.0, 0.0),
+                                                    child: FlutterFlowLineChart(
+                                                      data: [
+                                                        FFLineChartData(
+                                                          xData: List.generate(
+                                                                  random_data
+                                                                      .randomInteger(
+                                                                          31,
+                                                                          31),
+                                                                  (index) =>
+                                                                      random_data
+                                                                          .randomDate())
+                                                              .sortedList(),
+                                                          yData: List.generate(
+                                                              random_data
+                                                                  .randomInteger(
+                                                                      31, 31),
+                                                              (index) => random_data
+                                                                  .randomInteger(
+                                                                      60, 75)),
+                                                          settings:
+                                                              LineChartBarData(
                                                             color: const Color(
-                                                                0xB3DCD4F7),
+                                                                0xFF9B5DE5),
+                                                            barWidth: 1.0,
+                                                            isCurved: true,
+                                                            preventCurveOverShooting:
+                                                                true,
+                                                            belowBarData:
+                                                                BarAreaData(
+                                                              show: true,
+                                                              color: const Color(
+                                                                  0xB3DCD4F7),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      ],
+                                                      chartStylingInfo:
+                                                          ChartStylingInfo(
+                                                        enableTooltip: true,
+                                                        tooltipBackgroundColor:
+                                                            Colors.white,
+                                                        backgroundColor:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryBackground,
+                                                        borderColor:
+                                                            const Color(0xFFC3C3C3),
+                                                        borderWidth: 1.0,
+                                                      ),
+                                                      axisBounds: const AxisBounds(
+                                                        minY: 0.0,
+                                                        maxY: 100.0,
+                                                      ),
+                                                      xAxisLabelInfo:
+                                                          const AxisLabelInfo(
+                                                        title: '24-timer',
+                                                        titleTextStyle:
+                                                            TextStyle(
+                                                          fontSize: 14.0,
+                                                        ),
+                                                        reservedSize: 32.0,
+                                                      ),
+                                                      yAxisLabelInfo:
+                                                          AxisLabelInfo(
+                                                        title: '%-vis',
+                                                        titleTextStyle:
+                                                            const TextStyle(
+                                                          fontSize: 14.0,
+                                                        ),
+                                                        showLabels: true,
+                                                        labelInterval: 26.0,
+                                                        labelFormatter:
+                                                            LabelFormatter(
+                                                          numberFormat: (val) =>
+                                                              formatNumber(
+                                                            val,
+                                                            formatType:
+                                                                FormatType
+                                                                    .custom,
+                                                            format: '###',
+                                                            locale: '',
                                                           ),
                                                         ),
-                                                      )
-                                                    ],
-                                                    chartStylingInfo:
-                                                        ChartStylingInfo(
-                                                      backgroundColor:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondaryBackground,
-                                                      showBorder: false,
-                                                    ),
-                                                    axisBounds: const AxisBounds(),
-                                                    xAxisLabelInfo:
-                                                        const AxisLabelInfo(
-                                                      reservedSize: 32.0,
-                                                    ),
-                                                    yAxisLabelInfo:
-                                                        const AxisLabelInfo(
-                                                      reservedSize: 40.0,
+                                                        reservedSize: 40.0,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),

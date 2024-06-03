@@ -1,3 +1,4 @@
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -21,7 +22,13 @@ void main() async {
 
   await authManager.initialize();
 
-  runApp(const MyApp());
+  final appState = FFAppState(); // Initialize FFAppState
+  await appState.initializePersistedState();
+
+  runApp(ChangeNotifierProvider(
+    create: (context) => appState,
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -38,7 +45,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   ThemeMode _themeMode = FlutterFlowTheme.themeMode;
 
-  late Stream<AirQualAuthUser> userStream;
+  late Stream<AirQualMonitorAuthUser> userStream;
 
   late AppStateNotifier _appStateNotifier;
   late GoRouter _router;
@@ -49,7 +56,7 @@ class _MyAppState extends State<MyApp> {
 
     _appStateNotifier = AppStateNotifier.instance;
     _router = createRouter(_appStateNotifier);
-    userStream = airQualAuthUserStream()
+    userStream = airQualMonitorAuthUserStream()
       ..listen((user) => _appStateNotifier.update(user));
 
     Future.delayed(
@@ -66,7 +73,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'AirQual',
+      title: 'AirQual Monitor',
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

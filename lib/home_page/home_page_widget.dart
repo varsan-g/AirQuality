@@ -2,6 +2,7 @@ import '/components/side_bar_nav_widget.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -189,6 +190,58 @@ class _HomePageWidgetState extends State<HomePageWidget>
                         verticalDirection: VerticalDirection.down,
                         clipBehavior: Clip.none,
                         children: [
+                          Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 8.0, 0.0, 8.0),
+                                child: FFButtonWidget(
+                                  onPressed: () async {
+                                    context.pushNamed(
+                                      'addSensorPage',
+                                      extra: <String, dynamic>{
+                                        kTransitionInfoKey: const TransitionInfo(
+                                          hasTransition: true,
+                                          transitionType:
+                                              PageTransitionType.rightToLeft,
+                                        ),
+                                      },
+                                    );
+                                  },
+                                  text: 'Tilføj ny sensor',
+                                  options: FFButtonOptions(
+                                    height: 40.0,
+                                    padding: const EdgeInsetsDirectional.fromSTEB(
+                                        24.0, 0.0, 24.0, 0.0),
+                                    iconPadding: const EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 0.0, 0.0),
+                                    color: FlutterFlowTheme.of(context).primary,
+                                    textStyle: FlutterFlowTheme.of(context)
+                                        .titleSmall
+                                        .override(
+                                          fontFamily:
+                                              FlutterFlowTheme.of(context)
+                                                  .titleSmallFamily,
+                                          color: Colors.white,
+                                          letterSpacing: 0.0,
+                                          useGoogleFonts: GoogleFonts.asMap()
+                                              .containsKey(
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmallFamily),
+                                        ),
+                                    elevation: 3.0,
+                                    borderSide: const BorderSide(
+                                      color: Colors.transparent,
+                                      width: 1.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(8.0),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                           Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [

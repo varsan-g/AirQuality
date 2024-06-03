@@ -31,13 +31,13 @@ class CustomAuthManager {
     uid = null;
     userData = null;
     // Update the current user.
-    airQualAuthUserSubject.add(
-      AirQualAuthUser(loggedIn: false),
+    airQualMonitorAuthUserSubject.add(
+      AirQualMonitorAuthUser(loggedIn: false),
     );
     persistAuthData();
   }
 
-  Future<AirQualAuthUser?> signIn({
+  Future<AirQualMonitorAuthUser?> signIn({
     String? authenticationToken,
     String? refreshToken,
     DateTime? tokenExpiration,
@@ -73,7 +73,7 @@ class CustomAuthManager {
     );
   }
 
-  AirQualAuthUser? _updateCurrentUser({
+  AirQualMonitorAuthUser? _updateCurrentUser({
     String? authenticationToken,
     String? refreshToken,
     DateTime? tokenExpiration,
@@ -86,12 +86,12 @@ class CustomAuthManager {
     uid = authUid;
     this.userData = userData;
     // Update the current user stream.
-    final updatedUser = AirQualAuthUser(
+    final updatedUser = AirQualMonitorAuthUser(
       loggedIn: true,
       uid: authUid,
       userData: userData,
     );
-    airQualAuthUserSubject.add(updatedUser);
+    airQualMonitorAuthUserSubject.add(updatedUser);
     persistAuthData();
     return updatedUser;
   }
@@ -124,12 +124,12 @@ class CustomAuthManager {
     final authTokenExists = authenticationToken != null;
     final tokenExpired =
         tokenExpiration != null && tokenExpiration!.isBefore(DateTime.now());
-    final updatedUser = AirQualAuthUser(
+    final updatedUser = AirQualMonitorAuthUser(
       loggedIn: authTokenExists && !tokenExpired,
       uid: uid,
       userData: userData,
     );
-    airQualAuthUserSubject.add(updatedUser);
+    airQualMonitorAuthUserSubject.add(updatedUser);
   }
 
   void persistAuthData() {
@@ -151,5 +151,5 @@ class CustomAuthManager {
   }
 }
 
-AirQualAuthUser? currentUser;
+AirQualMonitorAuthUser? currentUser;
 bool get loggedIn => currentUser?.loggedIn ?? false;

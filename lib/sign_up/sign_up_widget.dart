@@ -1,6 +1,8 @@
 import '/backend/api_requests/api_calls.dart';
+import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/form_field_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -152,6 +154,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                         controller:
                                             _model.emailAddressTextController,
                                         focusNode: _model.emailAddressFocusNode,
+                                        autofocus: true,
                                         obscureText: false,
                                         decoration: InputDecoration(
                                           labelText: 'Email adresse',
@@ -381,118 +384,161 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 16.0, 0.0, 0.0),
-                                      child: TextFormField(
-                                        controller:
-                                            _model.firstNameTextController,
-                                        focusNode: _model.firstNameFocusNode,
-                                        textCapitalization:
-                                            TextCapitalization.none,
-                                        obscureText: false,
-                                        decoration: InputDecoration(
-                                          labelText: 'Fornavn',
-                                          labelStyle: FlutterFlowTheme.of(
-                                                  context)
-                                              .bodySmall
-                                              .override(
-                                                fontFamily:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodySmallFamily,
-                                                letterSpacing: 0.0,
-                                                useGoogleFonts: GoogleFonts
-                                                        .asMap()
-                                                    .containsKey(
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodySmallFamily),
-                                              ),
-                                          hintText: 'Indtast dit fornavn...',
-                                          hintStyle: FlutterFlowTheme.of(
-                                                  context)
-                                              .bodySmall
-                                              .override(
-                                                fontFamily:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodySmallFamily,
-                                                letterSpacing: 0.0,
-                                                useGoogleFonts: GoogleFonts
-                                                        .asMap()
-                                                    .containsKey(
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodySmallFamily),
-                                              ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primaryBackground,
-                                              width: 2.0,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(40.0),
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                              color: Color(0x00000000),
-                                              width: 2.0,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(40.0),
-                                          ),
-                                          errorBorder: OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                              color: Color(0x00000000),
-                                              width: 2.0,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(40.0),
-                                          ),
-                                          focusedErrorBorder:
-                                              OutlineInputBorder(
-                                            borderSide: const BorderSide(
-                                              color: Color(0x00000000),
-                                              width: 2.0,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(40.0),
-                                          ),
-                                          filled: true,
-                                          fillColor:
-                                              FlutterFlowTheme.of(context)
-                                                  .primaryBackground,
-                                          contentPadding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  16.0, 24.0, 0.0, 24.0),
-                                        ),
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium
+                                    child: TextFormField(
+                                      controller:
+                                          _model.firstNameTextController,
+                                      focusNode: _model.firstNameFocusNode,
+                                      textCapitalization:
+                                          TextCapitalization.none,
+                                      obscureText: false,
+                                      decoration: InputDecoration(
+                                        labelText: 'Fornavn',
+                                        labelStyle: FlutterFlowTheme.of(context)
+                                            .bodySmall
                                             .override(
                                               fontFamily:
                                                   FlutterFlowTheme.of(context)
-                                                      .bodyMediumFamily,
+                                                      .bodySmallFamily,
                                               letterSpacing: 0.0,
-                                              useGoogleFonts: GoogleFonts
-                                                      .asMap()
-                                                  .containsKey(
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .bodyMediumFamily),
+                                              useGoogleFonts:
+                                                  GoogleFonts.asMap()
+                                                      .containsKey(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodySmallFamily),
                                             ),
-                                        maxLength: 32,
-                                        maxLengthEnforcement:
-                                            MaxLengthEnforcement.enforced,
-                                        buildCounter: (context,
-                                                {required currentLength,
-                                                required isFocused,
-                                                maxLength}) =>
-                                            null,
-                                        validator: _model
-                                            .firstNameTextControllerValidator
-                                            .asValidator(context),
+                                        hintText: 'Indtast dit fornavn...',
+                                        hintStyle: FlutterFlowTheme.of(context)
+                                            .bodySmall
+                                            .override(
+                                              fontFamily:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodySmallFamily,
+                                              letterSpacing: 0.0,
+                                              useGoogleFonts:
+                                                  GoogleFonts.asMap()
+                                                      .containsKey(
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodySmallFamily),
+                                            ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: FlutterFlowTheme.of(context)
+                                                .primaryBackground,
+                                            width: 2.0,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(40.0),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 2.0,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(40.0),
+                                        ),
+                                        errorBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 2.0,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(40.0),
+                                        ),
+                                        focusedErrorBorder: OutlineInputBorder(
+                                          borderSide: const BorderSide(
+                                            color: Color(0x00000000),
+                                            width: 2.0,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(40.0),
+                                        ),
+                                        filled: true,
+                                        fillColor: FlutterFlowTheme.of(context)
+                                            .primaryBackground,
+                                        contentPadding:
+                                            const EdgeInsetsDirectional.fromSTEB(
+                                                16.0, 24.0, 0.0, 24.0),
                                       ),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMediumFamily,
+                                            letterSpacing: 0.0,
+                                            useGoogleFonts: GoogleFonts.asMap()
+                                                .containsKey(
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMediumFamily),
+                                          ),
+                                      maxLength: 32,
+                                      maxLengthEnforcement:
+                                          MaxLengthEnforcement.enforced,
+                                      buildCounter: (context,
+                                              {required currentLength,
+                                              required isFocused,
+                                              maxLength}) =>
+                                          null,
+                                      validator: _model
+                                          .firstNameTextControllerValidator
+                                          .asValidator(context),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 16.0, 0.0, 0.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: FlutterFlowDropDown<String>(
+                                      controller:
+                                          _model.institutionValueController ??=
+                                              FormFieldController<String>(null),
+                                      options: const ['Sønderborg Børnehave'],
+                                      onChanged: (val) => setState(
+                                          () => _model.institutionValue = val),
+                                      width: 300.0,
+                                      height: 56.0,
+                                      textStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily:
+                                                FlutterFlowTheme.of(context)
+                                                    .bodyMediumFamily,
+                                            letterSpacing: 0.0,
+                                            useGoogleFonts: GoogleFonts.asMap()
+                                                .containsKey(
+                                                    FlutterFlowTheme.of(context)
+                                                        .bodyMediumFamily),
+                                          ),
+                                      hintText: 'Vælg din institution',
+                                      icon: Icon(
+                                        Icons.keyboard_arrow_down_rounded,
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryText,
+                                        size: 24.0,
+                                      ),
+                                      fillColor: FlutterFlowTheme.of(context)
+                                          .primaryBackground,
+                                      elevation: 2.0,
+                                      borderColor: FlutterFlowTheme.of(context)
+                                          .primaryBackground,
+                                      borderWidth: 2.0,
+                                      borderRadius: 50.0,
+                                      margin: const EdgeInsetsDirectional.fromSTEB(
+                                          16.0, 4.0, 16.0, 4.0),
+                                      hidesUnderline: true,
+                                      isOverButton: true,
+                                      isSearchable: false,
+                                      isMultiSelect: false,
                                     ),
                                   ),
                                 ],
@@ -516,8 +562,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                             .emailAddressTextController.text,
                                         password:
                                             _model.passwordTextController.text,
-                                        firstname:
+                                        name:
                                             _model.firstNameTextController.text,
+                                        institution: _model.institutionValue,
                                       );
 
                                       context.pushNamed('signIn');
@@ -618,6 +665,9 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                               fontFamily:
                                                   FlutterFlowTheme.of(context)
                                                       .titleSmallFamily,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primary,
                                               letterSpacing: 0.0,
                                               useGoogleFonts: GoogleFonts
                                                       .asMap()

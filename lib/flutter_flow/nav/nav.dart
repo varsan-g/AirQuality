@@ -23,8 +23,8 @@ class AppStateNotifier extends ChangeNotifier {
   static AppStateNotifier? _instance;
   static AppStateNotifier get instance => _instance ??= AppStateNotifier._();
 
-  AirQualAuthUser? initialUser;
-  AirQualAuthUser? user;
+  AirQualMonitorAuthUser? initialUser;
+  AirQualMonitorAuthUser? user;
   bool showSplashImage = true;
   String? _redirectLocation;
 
@@ -49,7 +49,7 @@ class AppStateNotifier extends ChangeNotifier {
   /// to perform subsequent actions (such as navigation) afterwards.
   void updateNotifyOnAuthChange(bool notify) => notifyOnAuthChange = notify;
 
-  void update(AirQualAuthUser newUser) {
+  void update(AirQualMonitorAuthUser newUser) {
     final shouldUpdate =
         user?.uid == null || newUser.uid == null || user?.uid != newUser.uid;
     initialUser ??= newUser;
@@ -84,19 +84,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               appStateNotifier.loggedIn ? const NavBarPage() : const SignUpWidget(),
           routes: [
             FFRoute(
-              name: 'signIn',
-              path: 'signIn',
-              builder: (context, params) => const SignInWidget(),
-            ),
-            FFRoute(
               name: 'signUp',
               path: 'signUp',
               builder: (context, params) => const SignUpWidget(),
             ),
             FFRoute(
-              name: 'createProfile',
-              path: 'createProfile',
-              builder: (context, params) => const CreateProfileWidget(),
+              name: 'signIn',
+              path: 'signIn',
+              builder: (context, params) => const SignInWidget(),
             ),
             FFRoute(
               name: 'forgotPassword',
@@ -105,14 +100,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             ),
             FFRoute(
               name: 'homePage',
-              path: 'homePage',
+              path: 'home',
+              requireAuth: true,
               builder: (context, params) => params.isEmpty
                   ? const NavBarPage(initialPage: 'homePage')
                   : const HomePageWidget(),
             ),
             FFRoute(
               name: 'graphPage',
-              path: 'graphPage',
+              path: 'graph',
+              requireAuth: true,
               builder: (context, params) => params.isEmpty
                   ? const NavBarPage(initialPage: 'graphPage')
                   : const GraphPageWidget(),
@@ -120,9 +117,20 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             FFRoute(
               name: 'profilePage',
               path: 'profilePage',
+              requireAuth: true,
               builder: (context, params) => params.isEmpty
                   ? const NavBarPage(initialPage: 'profilePage')
                   : const ProfilePageWidget(),
+            ),
+            FFRoute(
+              name: 'forgotPasswordCopy',
+              path: 'forgotPasswordCopy',
+              builder: (context, params) => const ForgotPasswordCopyWidget(),
+            ),
+            FFRoute(
+              name: 'addSensorPage',
+              path: 'addSensorPage',
+              builder: (context, params) => const AddSensorPageWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ),

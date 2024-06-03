@@ -3,8 +3,8 @@ import 'package:rxdart/rxdart.dart';
 import '/backend/schema/structs/index.dart';
 import 'custom_auth_manager.dart';
 
-class AirQualAuthUser {
-  AirQualAuthUser({
+class AirQualMonitorAuthUser {
+  AirQualMonitorAuthUser({
     required this.loggedIn,
     this.uid,
     this.userData,
@@ -16,8 +16,9 @@ class AirQualAuthUser {
 }
 
 /// Generates a stream of the authenticated user.
-BehaviorSubject<AirQualAuthUser> airQualAuthUserSubject =
-    BehaviorSubject.seeded(AirQualAuthUser(loggedIn: false));
-Stream<AirQualAuthUser> airQualAuthUserStream() => airQualAuthUserSubject
-    .asBroadcastStream()
-    .map((user) => currentUser = user);
+BehaviorSubject<AirQualMonitorAuthUser> airQualMonitorAuthUserSubject =
+    BehaviorSubject.seeded(AirQualMonitorAuthUser(loggedIn: false));
+Stream<AirQualMonitorAuthUser> airQualMonitorAuthUserStream() =>
+    airQualMonitorAuthUserSubject
+        .asBroadcastStream()
+        .map((user) => currentUser = user);
