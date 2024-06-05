@@ -19,23 +19,21 @@ def main():
     setup_gpio()
 
     sensor = CO2Sensor("SER14710391759133") # The sensors serial number is needed to identify the sensor in the database.
+    secret_key = getpass.getpass("Enter the secret key: ")#.encode()
+    token = generate_token(sensor.ID, secret_key)
     lcd = LCD()
     buzzer_beeped = False
     start_time = 0
     batch_time_interval = 60 # The time interval in seconds for sending data to the server.
     first_run = True
     
-    secret_key = getpass.getpass("Enter the secret key: ")#.encode()
-    
     while True:
         sensor.measure()
-        
         print(sensor.data_set)
         
         if first_run:
             token = generate_token(sensor.ID, secret_key)
             send_sensor_data(API_ENDPOINT, sensor.data_set, token)
-            
             start_time = time.time()
             first_run = False
         
@@ -55,15 +53,17 @@ def main():
             change_led_state("red")
             beep_buzzer(3, 0.05, 0.05)
             buzzer_beeped = True
-            
             print("WARNING! CO2 level is above %d ppm. Sending data to server." %sensor.red_threshold)
+            token = generate_token(sensor.ID, secret_key)
             send_sensor_data(API_ENDPOINT, sensor.data_set, token)
         else:
             change_led_state("red") 
+            token = generate_token(sensor.ID, secret_key)
             send_sensor_data(API_ENDPOINT, sensor.data_set, token)
         
         # For future versions: The sensor unit should send live when a user is watching a live graph through the app/web.
         if time.time() - start_time >= batch_time_interval:
+            token = generate_token(sensor.ID, secret_key)
             send_sensor_data(API_ENDPOINT, sensor.data_set, token)
             start_time = time.time()
            
