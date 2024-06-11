@@ -1,17 +1,16 @@
 // ignore_for_file: unnecessary_getters_setters
 
-import 'package:cloud_firestore/cloud_firestore.dart';
+import '/backend/schema/util/schema_util.dart';
 
-import '/backend/schema/util/firestore_util.dart';
-
+import 'index.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
-class UserStruct extends FFFirebaseStruct {
+class UserStruct extends BaseStruct {
   UserStruct({
     String? email,
-    FirestoreUtilData firestoreUtilData = const FirestoreUtilData(),
+    String? firstName,
   })  : _email = email,
-        super(firestoreUtilData);
+        _firstName = firstName;
 
   // "email" field.
   String? _email;
@@ -19,8 +18,15 @@ class UserStruct extends FFFirebaseStruct {
   set email(String? val) => _email = val;
   bool hasEmail() => _email != null;
 
+  // "first_name" field.
+  String? _firstName;
+  String get firstName => _firstName ?? '';
+  set firstName(String? val) => _firstName = val;
+  bool hasFirstName() => _firstName != null;
+
   static UserStruct fromMap(Map<String, dynamic> data) => UserStruct(
         email: data['email'] as String?,
+        firstName: data['first_name'] as String?,
       );
 
   static UserStruct? maybeFromMap(dynamic data) =>
@@ -28,12 +34,17 @@ class UserStruct extends FFFirebaseStruct {
 
   Map<String, dynamic> toMap() => {
         'email': _email,
+        'first_name': _firstName,
       }.withoutNulls;
 
   @override
   Map<String, dynamic> toSerializableMap() => {
         'email': serializeParam(
           _email,
+          ParamType.String,
+        ),
+        'first_name': serializeParam(
+          _firstName,
           ParamType.String,
         ),
       }.withoutNulls;
@@ -45,6 +56,11 @@ class UserStruct extends FFFirebaseStruct {
           ParamType.String,
           false,
         ),
+        firstName: deserializeParam(
+          data['first_name'],
+          ParamType.String,
+          false,
+        ),
       );
 
   @override
@@ -52,83 +68,20 @@ class UserStruct extends FFFirebaseStruct {
 
   @override
   bool operator ==(Object other) {
-    return other is UserStruct && email == other.email;
+    return other is UserStruct &&
+        email == other.email &&
+        firstName == other.firstName;
   }
 
   @override
-  int get hashCode => const ListEquality().hash([email]);
+  int get hashCode => const ListEquality().hash([email, firstName]);
 }
 
 UserStruct createUserStruct({
   String? email,
-  Map<String, dynamic> fieldValues = const {},
-  bool clearUnsetFields = true,
-  bool create = false,
-  bool delete = false,
+  String? firstName,
 }) =>
     UserStruct(
       email: email,
-      firestoreUtilData: FirestoreUtilData(
-        clearUnsetFields: clearUnsetFields,
-        create: create,
-        delete: delete,
-        fieldValues: fieldValues,
-      ),
+      firstName: firstName,
     );
-
-UserStruct? updateUserStruct(
-  UserStruct? user, {
-  bool clearUnsetFields = true,
-  bool create = false,
-}) =>
-    user
-      ?..firestoreUtilData = FirestoreUtilData(
-        clearUnsetFields: clearUnsetFields,
-        create: create,
-      );
-
-void addUserStructData(
-  Map<String, dynamic> firestoreData,
-  UserStruct? user,
-  String fieldName, [
-  bool forFieldValue = false,
-]) {
-  firestoreData.remove(fieldName);
-  if (user == null) {
-    return;
-  }
-  if (user.firestoreUtilData.delete) {
-    firestoreData[fieldName] = FieldValue.delete();
-    return;
-  }
-  final clearFields = !forFieldValue && user.firestoreUtilData.clearUnsetFields;
-  if (clearFields) {
-    firestoreData[fieldName] = <String, dynamic>{};
-  }
-  final userData = getUserFirestoreData(user, forFieldValue);
-  final nestedData = userData.map((k, v) => MapEntry('$fieldName.$k', v));
-
-  final mergeFields = user.firestoreUtilData.create || clearFields;
-  firestoreData
-      .addAll(mergeFields ? mergeNestedFields(nestedData) : nestedData);
-}
-
-Map<String, dynamic> getUserFirestoreData(
-  UserStruct? user, [
-  bool forFieldValue = false,
-]) {
-  if (user == null) {
-    return {};
-  }
-  final firestoreData = mapToFirestore(user.toMap());
-
-  // Add any Firestore field values
-  user.firestoreUtilData.fieldValues.forEach((k, v) => firestoreData[k] = v);
-
-  return forFieldValue ? mergeNestedFields(firestoreData) : firestoreData;
-}
-
-List<Map<String, dynamic>> getUserListFirestoreData(
-  List<UserStruct>? users,
-) =>
-    users?.map((e) => getUserFirestoreData(e, true)).toList() ?? [];

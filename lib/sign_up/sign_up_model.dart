@@ -1,3 +1,4 @@
+import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/form_field_controller.dart';
 import 'sign_up_widget.dart' show SignUpWidget;
@@ -23,6 +24,10 @@ class SignUpModel extends FlutterFlowModel<SignUpWidget> {
   // State field(s) for institution widget.
   String? institutionValue;
   FormFieldController<String>? institutionValueController;
+  // Stores action output result for [Backend Call - API (Register)] action in card_ActiveUsers widget.
+  ApiCallResponse? registerResult;
+  // Stores action output result for [Backend Call - API (Login)] action in card_ActiveUsers widget.
+  ApiCallResponse? loginResult;
 
   @override
   void initState(BuildContext context) {

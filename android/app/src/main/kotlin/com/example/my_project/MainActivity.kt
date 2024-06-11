@@ -1,4 +1,4 @@
-package com.mycompany.dashboard
+package com.airqual.dashboard
 
 import io.flutter.embedding.android.FlutterActivity
 

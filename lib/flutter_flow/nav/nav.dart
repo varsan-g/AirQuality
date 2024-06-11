@@ -2,14 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '/backend/backend.dart';
+
 import '/backend/schema/structs/index.dart';
 
 import '/auth/custom_auth/custom_auth_user_provider.dart';
 
 import '/index.dart';
 import '/main.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 export 'package:go_router/go_router.dart';
@@ -85,22 +84,17 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           routes: [
             FFRoute(
               name: 'signUp',
-              path: 'signUp',
+              path: 'opret',
               builder: (context, params) => const SignUpWidget(),
             ),
             FFRoute(
               name: 'signIn',
-              path: 'signIn',
+              path: 'login',
               builder: (context, params) => const SignInWidget(),
             ),
             FFRoute(
-              name: 'forgotPassword',
-              path: 'forgotPassword',
-              builder: (context, params) => const ForgotPasswordWidget(),
-            ),
-            FFRoute(
               name: 'homePage',
-              path: 'home',
+              path: 'hjem',
               requireAuth: true,
               builder: (context, params) => params.isEmpty
                   ? const NavBarPage(initialPage: 'homePage')
@@ -108,7 +102,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             ),
             FFRoute(
               name: 'graphPage',
-              path: 'graph',
+              path: 'graf',
               requireAuth: true,
               builder: (context, params) => params.isEmpty
                   ? const NavBarPage(initialPage: 'graphPage')
@@ -116,20 +110,15 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             ),
             FFRoute(
               name: 'profilePage',
-              path: 'profilePage',
+              path: 'profil',
               requireAuth: true,
               builder: (context, params) => params.isEmpty
                   ? const NavBarPage(initialPage: 'profilePage')
                   : const ProfilePageWidget(),
             ),
             FFRoute(
-              name: 'forgotPasswordCopy',
-              path: 'forgotPasswordCopy',
-              builder: (context, params) => const ForgotPasswordCopyWidget(),
-            ),
-            FFRoute(
               name: 'addSensorPage',
-              path: 'addSensorPage',
+              path: 'sensor',
               builder: (context, params) => const AddSensorPageWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
@@ -251,7 +240,6 @@ class FFParameters {
     String paramName,
     ParamType type, {
     bool isList = false,
-    List<String>? collectionNamePath,
     StructBuilder<T>? structBuilder,
   }) {
     if (futureParamValues.containsKey(paramName)) {
@@ -270,7 +258,6 @@ class FFParameters {
       param,
       type,
       isList,
-      collectionNamePath: collectionNamePath,
       structBuilder: structBuilder,
     );
   }
@@ -305,7 +292,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
-            return '/signUp';
+            return '/opret';
           }
           return null;
         },
@@ -319,15 +306,11 @@ class FFRoute {
                 )
               : builder(context, ffParams);
           final child = appStateNotifier.loading
-              ? Center(
-                  child: SizedBox(
-                    width: 50.0,
-                    height: 50.0,
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        FlutterFlowTheme.of(context).primary,
-                      ),
-                    ),
+              ? Container(
+                  color: Colors.transparent,
+                  child: Image.asset(
+                    'assets/images/Black_And_White_Aesthetic_Minimalist_Modern_Simple_Typography_Coconut_Cosmetics_Logo.png',
+                    fit: BoxFit.contain,
                   ),
                 )
               : page;

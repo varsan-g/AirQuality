@@ -2,7 +2,6 @@ import '/auth/custom_auth/auth_util.dart';
 import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'sign_in_model.dart';
@@ -150,6 +149,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                                         controller:
                                             _model.emailAddressTextController,
                                         focusNode: _model.emailAddressFocusNode,
+                                        textInputAction: TextInputAction.next,
                                         obscureText: false,
                                         decoration: InputDecoration(
                                           labelText: 'Email adresse',
@@ -242,6 +242,8 @@ class _SignInWidgetState extends State<SignInWidget> {
                                                               context)
                                                           .bodyMediumFamily),
                                             ),
+                                        keyboardType:
+                                            TextInputType.emailAddress,
                                         validator: _model
                                             .emailAddressTextControllerValidator
                                             .asValidator(context),
@@ -262,6 +264,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                                     child: TextFormField(
                                       controller: _model.passwordTextController,
                                       focusNode: _model.passwordFocusNode,
+                                      textInputAction: TextInputAction.go,
                                       obscureText: !_model.passwordVisibility,
                                       decoration: InputDecoration(
                                         labelText: 'Adgangskode',
@@ -375,46 +378,11 @@ class _SignInWidgetState extends State<SignInWidget> {
                             ),
                             Padding(
                               padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 24.0, 0.0, 0.0),
+                                  0.0, 40.0, 0.0, 0.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  FFButtonWidget(
-                                    onPressed: () {
-                                      print(
-                                          'Button-ForgotPassword pressed ...');
-                                    },
-                                    text: 'Glemt adgangskode?',
-                                    options: FFButtonOptions(
-                                      width: 170.0,
-                                      height: 40.0,
-                                      padding: const EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 0.0, 0.0),
-                                      iconPadding:
-                                          const EdgeInsetsDirectional.fromSTEB(
-                                              0.0, 0.0, 0.0, 0.0),
-                                      color: const Color(0x00FFFFFF),
-                                      textStyle: FlutterFlowTheme.of(context)
-                                          .bodySmall
-                                          .override(
-                                            fontFamily:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodySmallFamily,
-                                            letterSpacing: 0.0,
-                                            useGoogleFonts: GoogleFonts.asMap()
-                                                .containsKey(
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodySmallFamily),
-                                          ),
-                                      elevation: 0.0,
-                                      borderSide: const BorderSide(
-                                        color: Colors.transparent,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                  ),
                                   InkWell(
                                     splashColor: Colors.transparent,
                                     focusColor: Colors.transparent,
@@ -435,52 +403,36 @@ class _SignInWidgetState extends State<SignInWidget> {
                                         await authManager.signIn(
                                           authenticationToken:
                                               valueOrDefault<String>(
-                                            (_model.authResponse?.getHeader(
-                                                    'Authorization') ??
-                                                ''),
+                                            LoginCall.token(
+                                              (_model.authResponse?.jsonBody ??
+                                                  ''),
+                                            ),
                                             'testAuthLogIn',
                                           ),
+                                          refreshToken: currentAuthRefreshToken,
+                                          tokenExpiration:
+                                              currentAuthTokenExpiration,
                                         );
                                         navigate = () => context.goNamedAuth(
                                             'homePage', context.mounted);
                                         FFAppState().token =
                                             valueOrDefault<String>(
-                                          (_model.authResponse?.getHeader(
-                                                  'Authorization') ??
-                                              ''),
+                                          LoginCall.token(
+                                            (_model.authResponse?.jsonBody ??
+                                                ''),
+                                          ),
                                           'lol',
                                         );
                                         FFAppState().update(() {});
-                                        await showDialog(
-                                          context: context,
-                                          builder: (alertDialogContext) {
-                                            return AlertDialog(
-                                              title:
-                                                  const Text('Header token received'),
-                                              content:
-                                                  Text(valueOrDefault<String>(
-                                                (_model.authResponse?.getHeader(
-                                                        'Authorization') ??
-                                                    ''),
-                                                'none',
-                                              )),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(
-                                                          alertDialogContext),
-                                                  child: const Text('Ok'),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
                                       } else {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
                                           SnackBar(
                                             content: Text(
-                                              'Username or password incorrect.',
+                                              (_model.authResponse
+                                                          ?.statusCode ??
+                                                      200)
+                                                  .toString(),
                                               style: TextStyle(
                                                 color:
                                                     FlutterFlowTheme.of(context)
@@ -596,22 +548,31 @@ class _SignInWidgetState extends State<SignInWidget> {
                                     Padding(
                                       padding: const EdgeInsetsDirectional.fromSTEB(
                                           8.0, 8.0, 0.0, 8.0),
-                                      child: Text(
-                                        'Opret en konto',
-                                        style: FlutterFlowTheme.of(context)
-                                            .titleSmall
-                                            .override(
-                                              fontFamily:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleSmallFamily,
-                                              letterSpacing: 0.0,
-                                              useGoogleFonts: GoogleFonts
-                                                      .asMap()
-                                                  .containsKey(
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleSmallFamily),
-                                            ),
+                                      child: InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          context.pushNamed('signUp');
+                                        },
+                                        child: Text(
+                                          'Opret en konto',
+                                          style: FlutterFlowTheme.of(context)
+                                              .titleSmall
+                                              .override(
+                                                fontFamily:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmallFamily,
+                                                letterSpacing: 0.0,
+                                                useGoogleFonts: GoogleFonts
+                                                        .asMap()
+                                                    .containsKey(
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .titleSmallFamily),
+                                              ),
+                                        ),
                                       ),
                                     ),
                                   ],

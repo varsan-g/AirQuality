@@ -9,11 +9,270 @@ export 'api_manager.dart' show ApiCallResponse;
 
 const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 
+/// Start Sensor Group Code
+
+class SensorGroup {
+  static String getBaseUrl({
+    String? authToken = '',
+  }) =>
+      'https://co2-backend-production.up.railway.app/api/';
+  static Map<String, String> headers = {};
+  static GetAllSensorDataCall getAllSensorDataCall = GetAllSensorDataCall();
+  static ListAllSensorsCall listAllSensorsCall = ListAllSensorsCall();
+  static GetSensorDataFromSpecificRoomNameCall
+      getSensorDataFromSpecificRoomNameCall =
+      GetSensorDataFromSpecificRoomNameCall();
+  static DeleteSensorCall deleteSensorCall = DeleteSensorCall();
+}
+
+class GetAllSensorDataCall {
+  Future<ApiCallResponse> call({
+    String? authToken = '',
+  }) async {
+    final baseUrl = SensorGroup.getBaseUrl(
+      authToken: authToken,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Get All Sensor Data',
+      apiUrl: '${baseUrl}sensor/data',
+      callType: ApiCallType.GET,
+      headers: {
+        'Authorization': '$authToken',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  List? sensorObj(dynamic response) => getJsonField(
+        response,
+        r'''$.sensors''',
+        true,
+      ) as List?;
+  List<String>? serials(dynamic response) => (getJsonField(
+        response,
+        r'''$.sensors[:].serialNum''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<String>? institutions(dynamic response) => (getJsonField(
+        response,
+        r'''$.sensors[:].institutionName''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<String>? roomNames(dynamic response) => (getJsonField(
+        response,
+        r'''$.sensors[:].roomName''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<String>? creationTimestamps(dynamic response) => (getJsonField(
+        response,
+        r'''$.sensors[:].timestamp''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List? temperatures(dynamic response) => getJsonField(
+        response,
+        r'''$.sensors[:].temperatures''',
+        true,
+      ) as List?;
+  List? humidities(dynamic response) => getJsonField(
+        response,
+        r'''$.sensors[:].humidities''',
+        true,
+      ) as List?;
+  List? co2s(dynamic response) => getJsonField(
+        response,
+        r'''$.sensors[:].co2''',
+        true,
+      ) as List?;
+  List? timestamps(dynamic response) => getJsonField(
+        response,
+        r'''$.sensors[:].timestamps''',
+        true,
+      ) as List?;
+}
+
+class ListAllSensorsCall {
+  Future<ApiCallResponse> call({
+    String? authToken = '',
+  }) async {
+    final baseUrl = SensorGroup.getBaseUrl(
+      authToken: authToken,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'List all Sensors',
+      apiUrl: '${baseUrl}sensor',
+      callType: ApiCallType.GET,
+      headers: {
+        'Authorization': '$authToken',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  List<String>? roomName(dynamic response) => (getJsonField(
+        response,
+        r'''$[:].roomName''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<String>? serialNum(dynamic response) => (getJsonField(
+        response,
+        r'''$[:].serialNum''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+}
+
+class GetSensorDataFromSpecificRoomNameCall {
+  Future<ApiCallResponse> call({
+    String? roomName = '',
+    String? authToken = '',
+  }) async {
+    final baseUrl = SensorGroup.getBaseUrl(
+      authToken: authToken,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Get Sensor Data from specific Room name',
+      apiUrl: '${baseUrl}sensor/data/:$roomName',
+      callType: ApiCallType.GET,
+      headers: {
+        'Authorization': '$authToken',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  List? sensorsObj(dynamic response) => getJsonField(
+        response,
+        r'''$.sensors''',
+        true,
+      ) as List?;
+  String? serials(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.sensors[:].serialNum''',
+      ));
+  String? institutionName(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.sensors[:].institutionName''',
+      ));
+  String? roomName(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.sensors[:].roomName''',
+      ));
+  String? creationTimestamp(dynamic response) =>
+      castToType<String>(getJsonField(
+        response,
+        r'''$.sensors[:].timestamp''',
+      ));
+  List<String>? temperatures(dynamic response) => (getJsonField(
+        response,
+        r'''$.sensors[:].temperatures''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<String>? humidities(dynamic response) => (getJsonField(
+        response,
+        r'''$.sensors[:].humidities''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<String>? timestamps(dynamic response) => (getJsonField(
+        response,
+        r'''$.sensors[:].timestamps''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<String>? co2s(dynamic response) => (getJsonField(
+        response,
+        r'''$.sensors[:].co2''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+}
+
+class DeleteSensorCall {
+  Future<ApiCallResponse> call({
+    String? serialNum = '',
+    String? authToken = '',
+  }) async {
+    final baseUrl = SensorGroup.getBaseUrl(
+      authToken: authToken,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Delete sensor',
+      apiUrl: '${baseUrl}sensor/$serialNum',
+      callType: ApiCallType.DELETE,
+      headers: {
+        'Authorization': '$authToken',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
+/// End Sensor Group Code
+
 class LoginCall {
   static Future<ApiCallResponse> call({
     String? email = '',
     String? password = '',
-    String? token = '',
   }) async {
     final ffApiRequestBody = '''
 {
@@ -39,6 +298,10 @@ class LoginCall {
   static String? message(dynamic response) => castToType<String>(getJsonField(
         response,
         r'''$.message''',
+      ));
+  static String? token(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.token''',
       ));
 }
 
@@ -159,7 +422,7 @@ class CreateSensorCall {
       apiUrl: 'https://co2-backend-production.up.railway.app/api/sensor',
       callType: ApiCallType.POST,
       headers: {
-        'Authorization': 'Bearer $authToken',
+        'Authorization': '$authToken',
       },
       params: {},
       body: ffApiRequestBody,
@@ -195,9 +458,6 @@ class ApiPagingParams {
 }
 
 String _toEncodable(dynamic item) {
-  if (item is DocumentReference) {
-    return item.path;
-  }
   return item;
 }
 

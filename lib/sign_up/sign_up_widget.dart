@@ -1,4 +1,6 @@
+import '/auth/custom_auth/auth_util.dart';
 import '/backend/api_requests/api_calls.dart';
+import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -155,6 +157,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                             _model.emailAddressTextController,
                                         focusNode: _model.emailAddressFocusNode,
                                         autofocus: true,
+                                        textInputAction: TextInputAction.next,
                                         obscureText: false,
                                         decoration: InputDecoration(
                                           labelText: 'Email adresse',
@@ -246,6 +249,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                                               context)
                                                           .bodyMediumFamily),
                                             ),
+                                        keyboardType:
+                                            TextInputType.emailAddress,
                                         validator: _model
                                             .emailAddressTextControllerValidator
                                             .asValidator(context),
@@ -266,8 +271,10 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                     child: TextFormField(
                                       controller: _model.passwordTextController,
                                       focusNode: _model.passwordFocusNode,
+                                      textInputAction: TextInputAction.next,
                                       obscureText: !_model.passwordVisibility,
                                       decoration: InputDecoration(
+                                        isDense: false,
                                         labelText: 'Password',
                                         labelStyle: FlutterFlowTheme.of(context)
                                             .bodySmall
@@ -390,6 +397,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                       focusNode: _model.firstNameFocusNode,
                                       textCapitalization:
                                           TextCapitalization.none,
+                                      textInputAction: TextInputAction.next,
                                       obscureText: false,
                                       decoration: InputDecoration(
                                         labelText: 'Fornavn',
@@ -546,10 +554,10 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                             ),
                             Padding(
                               padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 24.0, 0.0, 0.0),
+                                  0.0, 40.0, 0.0, 0.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   InkWell(
                                     splashColor: Colors.transparent,
@@ -557,7 +565,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
                                     onTap: () async {
-                                      await RegisterCall.call(
+                                      _model.registerResult =
+                                          await RegisterCall.call(
                                         email: _model
                                             .emailAddressTextController.text,
                                         password:
@@ -566,8 +575,78 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                             _model.firstNameTextController.text,
                                         institution: _model.institutionValue,
                                       );
+                                      if ((_model.registerResult?.succeeded ??
+                                          true)) {
+                                        _model.loginResult =
+                                            await LoginCall.call(
+                                          email: _model
+                                              .emailAddressTextController.text,
+                                          password: _model
+                                              .passwordTextController.text,
+                                        );
+                                        if ((_model.loginResult?.succeeded ??
+                                            true)) {
+                                          GoRouter.of(context)
+                                              .prepareAuthEvent();
+                                          await authManager.signIn(
+                                            authenticationToken:
+                                                LoginCall.token(
+                                              (_model.loginResult?.jsonBody ??
+                                                  ''),
+                                            ),
+                                            userData: UserStruct(
+                                              email: _model
+                                                  .emailAddressTextController
+                                                  .text,
+                                              firstName: _model
+                                                  .firstNameTextController.text,
+                                            ),
+                                          );
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                'Vi kunne desværre ikke logge dig ind.',
+                                                style: TextStyle(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                ),
+                                              ),
+                                              duration:
+                                                  const Duration(milliseconds: 4000),
+                                              backgroundColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondary,
+                                            ),
+                                          );
 
-                                      context.pushNamed('signIn');
+                                          context.pushNamedAuth(
+                                              'signIn', context.mounted);
+                                        }
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(
+                                              'Vi kunne desværre ikke oprette dig i vores system.',
+                                              style: TextStyle(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
+                                              ),
+                                            ),
+                                            duration:
+                                                const Duration(milliseconds: 4000),
+                                            backgroundColor:
+                                                FlutterFlowTheme.of(context)
+                                                    .secondary,
+                                          ),
+                                        );
+                                      }
+
+                                      setState(() {});
                                     },
                                     child: Container(
                                       width: 150.0,
@@ -657,25 +736,34 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                     Padding(
                                       padding: const EdgeInsetsDirectional.fromSTEB(
                                           8.0, 8.0, 0.0, 8.0),
-                                      child: Text(
-                                        'Log ind',
-                                        style: FlutterFlowTheme.of(context)
-                                            .titleSmall
-                                            .override(
-                                              fontFamily:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleSmallFamily,
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .primary,
-                                              letterSpacing: 0.0,
-                                              useGoogleFonts: GoogleFonts
-                                                      .asMap()
-                                                  .containsKey(
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleSmallFamily),
-                                            ),
+                                      child: InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          context.pushNamed('signIn');
+                                        },
+                                        child: Text(
+                                          'Log ind',
+                                          style: FlutterFlowTheme.of(context)
+                                              .titleSmall
+                                              .override(
+                                                fontFamily:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmallFamily,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primary,
+                                                letterSpacing: 0.0,
+                                                useGoogleFonts: GoogleFonts
+                                                        .asMap()
+                                                    .containsKey(
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .titleSmallFamily),
+                                              ),
+                                        ),
                                       ),
                                     ),
                                   ],

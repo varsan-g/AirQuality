@@ -26,7 +26,11 @@ class _AddSensorPageWidgetState extends State<AddSensorPageWidget> {
     super.initState();
     _model = createModel(context, () => AddSensorPageModel());
 
-    _model.textController1 ??= TextEditingController(text: _model.serienummer);
+    _model.textController1 ??= TextEditingController(
+        text: valueOrDefault<String>(
+      _model.serienummer,
+      'N/A',
+    ));
     _model.textFieldFocusNode1 ??= FocusNode();
 
     _model.textController2 ??= TextEditingController();
@@ -92,49 +96,61 @@ class _AddSensorPageWidgetState extends State<AddSensorPageWidget> {
                             FlutterFlowTheme.of(context).bodyMediumFamily),
                       ),
                 ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 34.0, 0.0, 0.0),
-                  child: FFButtonWidget(
-                    onPressed: () async {
-                      _model.serienummer =
-                          await FlutterBarcodeScanner.scanBarcode(
-                        '#C62828', // scanning line color
-                        'Annullér', // cancel button text
-                        true, // whether to show the flash icon
-                        ScanMode.QR,
-                      );
+                if (valueOrDefault<bool>(
+                  isAndroid,
+                  false,
+                ))
+                  Padding(
+                    padding:
+                        const EdgeInsetsDirectional.fromSTEB(0.0, 34.0, 0.0, 0.0),
+                    child: FFButtonWidget(
+                      onPressed: () async {
+                        if (isAndroid) {
+                          _model.serienummer =
+                              await FlutterBarcodeScanner.scanBarcode(
+                            '#C62828', // scanning line color
+                            'Annullér', // cancel button text
+                            true, // whether to show the flash icon
+                            ScanMode.QR,
+                          );
+                        }
 
-                      setState(() {});
-                    },
-                    text: 'Skan QR kode',
-                    options: FFButtonOptions(
-                      width: double.infinity,
-                      height: 55.0,
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      iconPadding:
-                          const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                      color: FlutterFlowTheme.of(context).primary,
-                      textStyle: FlutterFlowTheme.of(context)
-                          .titleMedium
-                          .override(
-                            fontFamily:
-                                FlutterFlowTheme.of(context).titleMediumFamily,
-                            color: Colors.white,
-                            letterSpacing: 0.0,
-                            useGoogleFonts: GoogleFonts.asMap().containsKey(
-                                FlutterFlowTheme.of(context).titleMediumFamily),
-                          ),
-                      elevation: 2.0,
-                      borderRadius: BorderRadius.circular(10.0),
+                        setState(() {});
+                      },
+                      text: 'Skan QR kode',
+                      options: FFButtonOptions(
+                        width: double.infinity,
+                        height: 55.0,
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        iconPadding:
+                            const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        color: FlutterFlowTheme.of(context).primary,
+                        textStyle:
+                            FlutterFlowTheme.of(context).titleMedium.override(
+                                  fontFamily: FlutterFlowTheme.of(context)
+                                      .titleMediumFamily,
+                                  color: Colors.white,
+                                  letterSpacing: 0.0,
+                                  useGoogleFonts: GoogleFonts.asMap()
+                                      .containsKey(FlutterFlowTheme.of(context)
+                                          .titleMediumFamily),
+                                ),
+                        elevation: 2.0,
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                     ),
                   ),
-                ),
                 Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
                   child: TextFormField(
                     controller: _model.textController1,
                     focusNode: _model.textFieldFocusNode1,
+                    onFieldSubmitted: (_) async {
+                      setState(() {
+                        _model.textController1?.text = _model.serienummer;
+                      });
+                    },
                     autofocus: false,
                     obscureText: false,
                     decoration: InputDecoration(
@@ -252,6 +268,7 @@ class _AddSensorPageWidgetState extends State<AddSensorPageWidget> {
                   padding: const EdgeInsetsDirectional.fromSTEB(0.0, 84.0, 0.0, 0.0),
                   child: FFButtonWidget(
                     onPressed: () async {
+                      var shouldSetState = false;
                       var confirmDialogResponse = await showDialog<bool>(
                             context: context,
                             builder: (alertDialogContext) {
@@ -278,11 +295,9 @@ class _AddSensorPageWidgetState extends State<AddSensorPageWidget> {
                         serialNum: _model.textController1.text,
                         roomName: _model.textController2.text,
                         institutionName: 'Sønderborg Børnehave',
-                        authToken: valueOrDefault<String>(
-                          currentAuthenticationToken,
-                          'sensortest',
-                        ),
+                        authToken: currentAuthenticationToken,
                       );
+                      shouldSetState = true;
                       if ((_model.createSensorResult?.succeeded ?? true)) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -296,6 +311,16 @@ class _AddSensorPageWidgetState extends State<AddSensorPageWidget> {
                             backgroundColor:
                                 FlutterFlowTheme.of(context).secondary,
                           ),
+                        );
+
+                        context.pushNamed(
+                          'homePage',
+                          extra: <String, dynamic>{
+                            kTransitionInfoKey: const TransitionInfo(
+                              hasTransition: true,
+                              transitionType: PageTransitionType.rightToLeft,
+                            ),
+                          },
                         );
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -311,9 +336,11 @@ class _AddSensorPageWidgetState extends State<AddSensorPageWidget> {
                                 FlutterFlowTheme.of(context).secondary,
                           ),
                         );
+                        if (shouldSetState) setState(() {});
+                        return;
                       }
 
-                      setState(() {});
+                      if (shouldSetState) setState(() {});
                     },
                     text: 'Tilføj sensor',
                     options: FFButtonOptions(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import '/backend/schema/structs/index.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'flutter_flow/flutter_flow_util.dart';
 
 class FFAppState extends ChangeNotifier {
   static FFAppState _instance = FFAppState._internal();
@@ -33,6 +35,17 @@ class FFAppState extends ChangeNotifier {
   set token(String value) {
     _token = value;
     prefs.setString('ff_token', value);
+  }
+
+  RoomStruct _room = RoomStruct.fromSerializableMap(jsonDecode(
+      '{\"co2\":\"[]\",\"temperatures\":\"[]\",\"humidities\":\"[]\",\"roomName\":\"[]\"}'));
+  RoomStruct get room => _room;
+  set room(RoomStruct value) {
+    _room = value;
+  }
+
+  void updateRoomStruct(Function(RoomStruct) updateFn) {
+    updateFn(_room);
   }
 }
 

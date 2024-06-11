@@ -18,10 +18,10 @@
   },
   "scripts": {
     "lint": "./node_modules/.bin/eslint --max-warnings=0 .",
-    "serve": "firebase -P nocodeui-db3f9 emulators:start --only functions",
-    "shell": "firebase -P nocodeui-db3f9 functions:shell",
+    "serve": "firebase -P airqual-9022b emulators:start --only functions",
+    "shell": "firebase -P airqual-9022b functions:shell",
     "start": "npm run shell",
-    "logs": "firebase -P nocodeui-db3f9 functions:log",
+    "logs": "firebase -P airqual-9022b functions:log",
     "compile": "cp ../../tsconfig.template.json ./tsconfig-compile.json && tsc --project tsconfig-compile.json"
   },
   "engines": {
