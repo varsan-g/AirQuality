@@ -1,4 +1,6 @@
 # Use python3.8 to run this script.
+# This script is the main script for the CO2 sensor unit.
+# It reads the data from the sensor, sends the data to the server and controls the LED lights, buzzer and LCD display.
 
 import getpass
 import hashlib
@@ -20,6 +22,7 @@ API_ENDPOINT = "https://co2-backend-production.up.railway.app/api/sensor/data"
 def main():
     setup_gpio()
 
+    # Variables for the main loop.
     sensor = CO2Sensor("SER14710391759133") # The sensors serial number is needed to identify the sensor in the database.
     secret_key = getpass.getpass("Enter the secret key: ")#.encode()
     token = generate_token(sensor.ID, secret_key)
@@ -33,18 +36,21 @@ def main():
         sensor.measure()
         print(sensor.data_set)
         
-        if first_run:
+        # Sends an initial data set to the server when the script is first run.
+        if first_run and sensor.has_data:
             token = generate_token(sensor.ID, secret_key)
             send_sensor_data(API_ENDPOINT, sensor.data_set, token)
             start_time = time.time()
             first_run = False
         
+        # Handles what is shown on the LCD screen.
         if sensor.has_data:
             lcd.lcd_string("ID:%s" %sensor.ID, lcd.LCD_LINE_1, 1)
             lcd.lcd_string("CO2: %d ppm" %sensor.CO2, lcd.LCD_LINE_2, 1)
             lcd.lcd_string("Temp: %0.1f C" %sensor.temperature, lcd.LCD_LINE_3, 1)
             lcd.lcd_string("Humidity: %0.1f %%" %sensor.relative_humidity, lcd.LCD_LINE_4, 1)
 
+        # Handles the LED lights and buzzer.
         if sensor.has_data and sensor.CO2 < sensor.yellow_threshold:
             change_led_state("green")
             buzzer_beeped = False
@@ -58,8 +64,6 @@ def main():
             print("WARNING! CO2 level is above %d ppm. Sending data to server." %sensor.red_threshold)
             token = generate_token(sensor.ID, secret_key)
             send_sensor_data(API_ENDPOINT, sensor.data_set, token)
-        else:
-            change_led_state("red")
         
         # For future versions: The sensor unit should send live when a user is watching a live graph through the app/web.
         # Also have some deactivation threshold for the lights, buzzer and sending data to the server so there is no flickering and spam effect.
@@ -69,6 +73,7 @@ def main():
             start_time = time.time()
            
 
+# Generates a token for the API request.
 def generate_token(serial_number, secret_key):
     timestamp = str(int(time.time()))
     message = serial_number + timestamp
@@ -80,6 +85,7 @@ def generate_token(serial_number, secret_key):
     return token
 
 
+# Sends the sensor data to the server.
 def send_sensor_data(url, data_set, token):
     headers = {
         "Authorization": f"Bearer {token}"
