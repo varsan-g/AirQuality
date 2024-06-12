@@ -1,3 +1,5 @@
+# Use python3.8 to run this script.
+
 import getpass
 import hashlib
 import hmac
@@ -57,11 +59,10 @@ def main():
             token = generate_token(sensor.ID, secret_key)
             send_sensor_data(API_ENDPOINT, sensor.data_set, token)
         else:
-            change_led_state("red") 
-            token = generate_token(sensor.ID, secret_key)
-            send_sensor_data(API_ENDPOINT, sensor.data_set, token)
+            change_led_state("red")
         
         # For future versions: The sensor unit should send live when a user is watching a live graph through the app/web.
+        # Also have some deactivation threshold for the lights, buzzer and sending data to the server so there is no flickering and spam effect.
         if time.time() - start_time >= batch_time_interval:
             token = generate_token(sensor.ID, secret_key)
             send_sensor_data(API_ENDPOINT, sensor.data_set, token)

@@ -30,7 +30,7 @@
 
 # Tutorial og code snippets fra: http://wiki.sunfounder.cc/index.php?title=LCD2004_Module#The_Experiment_for_Raspberry_Pi
 
-# Husk: Brug python3
+# Remember: Use at least python3
 import RPi.GPIO as GPIO
 import time
 
@@ -60,7 +60,7 @@ class LCD:
     E_DELAY = 0.0005
 
 
-    def __init__(self): # This constructor is only needed when you want instance specific code to be executed.
+    def __init__(self):
         # Setup
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)            # Use BCM GPIO numbers
@@ -74,17 +74,8 @@ class LCD:
       
         # Initialise display
         self.lcd_init()
-      
-        # TODO: Maybe delete later because I can not see the effect on the display.
-        # Toggle backlight on-off-on
-        # self.lcd_backlight(True)
-        # time.sleep(0.5)
-        # self.lcd_backlight(False)
-        # time.sleep(0.5)
-        # self.lcd_backlight(True)
-        # time.sleep(0.5)
 
-    
+
     def lcd_test(self):
         # Send some test
         self.lcd_string("Test inside lcd.py", self.LCD_LINE_1, 2)
@@ -102,7 +93,7 @@ class LCD:
         self.lcd_byte(0x33, self.LCD_CMD) # 110011 Initialise
         self.lcd_byte(0x32, self.LCD_CMD) # 110010 Initialise
         self.lcd_byte(0x06, self.LCD_CMD) # 000110 Cursor move direction
-        self.lcd_byte(0x0C, self.LCD_CMD) # 001100 Display On,Cursor Off, Blink Off
+        self.lcd_byte(0x0C, self.LCD_CMD) # 001100 Display On, Cursor Off, Blink Off
         self.lcd_byte(0x28, self.LCD_CMD) # 101000 Data length, number of lines, font size
         self.lcd_byte(0x01, self.LCD_CMD) # 000001 Clear display
         time.sleep(LCD.E_DELAY)
