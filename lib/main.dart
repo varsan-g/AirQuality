@@ -1,3 +1,4 @@
+import '/custom_code/actions/index.dart' as actions;
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
@@ -18,6 +19,10 @@ void main() async {
   GoRouter.optionURLReflectsImperativeAPIs = true;
   usePathUrlStrategy();
   await initFirebase();
+
+  // Start initial custom actions code
+  await actions.initializeFirebase();
+  // End initial custom actions code
 
   await FlutterFlowTheme.initialize();
 
@@ -131,7 +136,7 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'homePage': const HomePageWidget(),
       'graphPage': const GraphPageWidget(),
-      'profilePage': const ProfilePageWidget(),
+      'settingsPage': const SettingsPageWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
@@ -174,7 +179,7 @@ class _NavBarPageState extends State<NavBarPage> {
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                Icons.account_circle_outlined,
+                Icons.settings,
                 size: 24.0,
               ),
               label: '•',

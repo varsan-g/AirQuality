@@ -69,3 +69,18 @@ double? convertStringToInt(String? value) {
     return null;
   }
 }
+
+bool convertStringToBool(String value) {
+  // take string and return bool
+  return value.toLowerCase() == 'true';
+}
+
+String capitalizeLetter(String value) {
+  // capitalize the first letter of each word
+  List<String> words = value.split(' ');
+  String capitalized = '';
+  for (String word in words) {
+    capitalized += word[0].toUpperCase() + word.substring(1) + ' ';
+  }
+  return capitalized.trim();
+}

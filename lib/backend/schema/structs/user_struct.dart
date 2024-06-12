@@ -9,8 +9,12 @@ class UserStruct extends BaseStruct {
   UserStruct({
     String? email,
     String? firstName,
+    String? institutionName,
+    bool? isAdmin,
   })  : _email = email,
-        _firstName = firstName;
+        _firstName = firstName,
+        _institutionName = institutionName,
+        _isAdmin = isAdmin;
 
   // "email" field.
   String? _email;
@@ -24,9 +28,23 @@ class UserStruct extends BaseStruct {
   set firstName(String? val) => _firstName = val;
   bool hasFirstName() => _firstName != null;
 
+  // "institutionName" field.
+  String? _institutionName;
+  String get institutionName => _institutionName ?? '';
+  set institutionName(String? val) => _institutionName = val;
+  bool hasInstitutionName() => _institutionName != null;
+
+  // "isAdmin" field.
+  bool? _isAdmin;
+  bool get isAdmin => _isAdmin ?? false;
+  set isAdmin(bool? val) => _isAdmin = val;
+  bool hasIsAdmin() => _isAdmin != null;
+
   static UserStruct fromMap(Map<String, dynamic> data) => UserStruct(
         email: data['email'] as String?,
         firstName: data['first_name'] as String?,
+        institutionName: data['institutionName'] as String?,
+        isAdmin: data['isAdmin'] as bool?,
       );
 
   static UserStruct? maybeFromMap(dynamic data) =>
@@ -35,6 +53,8 @@ class UserStruct extends BaseStruct {
   Map<String, dynamic> toMap() => {
         'email': _email,
         'first_name': _firstName,
+        'institutionName': _institutionName,
+        'isAdmin': _isAdmin,
       }.withoutNulls;
 
   @override
@@ -46,6 +66,14 @@ class UserStruct extends BaseStruct {
         'first_name': serializeParam(
           _firstName,
           ParamType.String,
+        ),
+        'institutionName': serializeParam(
+          _institutionName,
+          ParamType.String,
+        ),
+        'isAdmin': serializeParam(
+          _isAdmin,
+          ParamType.bool,
         ),
       }.withoutNulls;
 
@@ -61,6 +89,16 @@ class UserStruct extends BaseStruct {
           ParamType.String,
           false,
         ),
+        institutionName: deserializeParam(
+          data['institutionName'],
+          ParamType.String,
+          false,
+        ),
+        isAdmin: deserializeParam(
+          data['isAdmin'],
+          ParamType.bool,
+          false,
+        ),
       );
 
   @override
@@ -70,18 +108,25 @@ class UserStruct extends BaseStruct {
   bool operator ==(Object other) {
     return other is UserStruct &&
         email == other.email &&
-        firstName == other.firstName;
+        firstName == other.firstName &&
+        institutionName == other.institutionName &&
+        isAdmin == other.isAdmin;
   }
 
   @override
-  int get hashCode => const ListEquality().hash([email, firstName]);
+  int get hashCode =>
+      const ListEquality().hash([email, firstName, institutionName, isAdmin]);
 }
 
 UserStruct createUserStruct({
   String? email,
   String? firstName,
+  String? institutionName,
+  bool? isAdmin,
 }) =>
     UserStruct(
       email: email,
       firstName: firstName,
+      institutionName: institutionName,
+      isAdmin: isAdmin,
     );

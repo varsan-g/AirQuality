@@ -23,6 +23,8 @@ class SensorGroup {
       getSensorDataFromSpecificRoomNameCall =
       GetSensorDataFromSpecificRoomNameCall();
   static DeleteSensorCall deleteSensorCall = DeleteSensorCall();
+  static FilterDataByHoursCall filterDataByHoursCall = FilterDataByHoursCall();
+  static FilterDataByDaysCall filterDataByDaysCall = FilterDataByDaysCall();
 }
 
 class GetAllSensorDataCall {
@@ -267,6 +269,104 @@ class DeleteSensorCall {
   }
 }
 
+class FilterDataByHoursCall {
+  Future<ApiCallResponse> call({
+    String? hours = '1',
+    String? authToken = '',
+  }) async {
+    final baseUrl = SensorGroup.getBaseUrl(
+      authToken: authToken,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Filter data by hours',
+      apiUrl: '${baseUrl}sensor/data/hours/$hours',
+      callType: ApiCallType.GET,
+      headers: {
+        'Authorization': '$authToken',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      alwaysAllowBody: false,
+    );
+  }
+
+  List<String>? temperatures(dynamic response) => (getJsonField(
+        response,
+        r'''$.sensors[:].temperatures''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<String>? humidities(dynamic response) => (getJsonField(
+        response,
+        r'''$.sensors[:].humidities''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<String>? co2s(dynamic response) => (getJsonField(
+        response,
+        r'''$.sensors[:].co2''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List<String>? timestamps(dynamic response) => (getJsonField(
+        response,
+        r'''$.sensors[:].timestamps''',
+        true,
+      ) as List?)
+          ?.withoutNulls
+          .map((x) => castToType<String>(x))
+          .withoutNulls
+          .toList();
+  List? sensorObj(dynamic response) => getJsonField(
+        response,
+        r'''$.sensors''',
+        true,
+      ) as List?;
+  String? roomName(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.sensors[:].roomName''',
+      ));
+}
+
+class FilterDataByDaysCall {
+  Future<ApiCallResponse> call({
+    String? days = '1',
+    String? authToken = '',
+  }) async {
+    final baseUrl = SensorGroup.getBaseUrl(
+      authToken: authToken,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Filter data by days',
+      apiUrl: '${baseUrl}sensor/data/days/$days',
+      callType: ApiCallType.GET,
+      headers: {
+        'Authorization': '$authToken',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
 /// End Sensor Group Code
 
 class LoginCall {
@@ -295,14 +395,31 @@ class LoginCall {
     );
   }
 
-  static String? message(dynamic response) => castToType<String>(getJsonField(
-        response,
-        r'''$.message''',
-      ));
   static String? token(dynamic response) => castToType<String>(getJsonField(
         response,
         r'''$.token''',
       ));
+  static String? name(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.user.name''',
+      ));
+  static String? email(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.user.email''',
+      ));
+  static String? institutionName(dynamic response) =>
+      castToType<String>(getJsonField(
+        response,
+        r'''$.user.institutionName''',
+      ));
+  static String? isAdmin(dynamic response) => castToType<String>(getJsonField(
+        response,
+        r'''$.user.isAdmin''',
+      ));
+  static dynamic userObj(dynamic response) => getJsonField(
+        response,
+        r'''$.user''',
+      );
 }
 
 class RegisterCall {
@@ -439,6 +556,34 @@ class CreateSensorCall {
         response,
         r'''$.message''',
       ));
+}
+
+class UpdateFCMTokenCall {
+  static Future<ApiCallResponse> call({
+    String? fcmToken = '',
+    String? authToken = '',
+  }) async {
+    final ffApiRequestBody = '''
+{
+  "fcmToken": "$fcmToken"
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'Update FCM Token',
+      apiUrl: 'https://co2-backend-production.up.railway.app/api/fcm',
+      callType: ApiCallType.POST,
+      headers: {
+        'Authorization': '$authToken',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      alwaysAllowBody: false,
+    );
+  }
 }
 
 class ApiPagingParams {

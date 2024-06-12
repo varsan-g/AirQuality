@@ -72,6 +72,7 @@ abstract class FlutterFlowTheme {
   late Color cornsilk;
   late Color papayaWhip;
   late Color buff;
+  late Color customColor1;
 
   @Deprecated('Use displaySmallFamily instead')
   String get title1Family => displaySmallFamily;
@@ -159,7 +160,7 @@ class LightModeTheme extends FlutterFlowTheme {
   @Deprecated('Use tertiary instead')
   Color get tertiaryColor => tertiary;
 
-  late Color primary = const Color(0xFFCCD5AE);
+  late Color primary = const Color(0xFF74C69D);
   late Color secondary = const Color(0xFFE9EDC9);
   late Color tertiary = const Color(0xFFFEFAE0);
   late Color alternate = const Color(0xFFFAEDCD);
@@ -179,12 +180,13 @@ class LightModeTheme extends FlutterFlowTheme {
   late Color primaryBtnText = const Color(0xFFFFFFFF);
   late Color lineColor = const Color(0xFFE0E3E7);
   late Color white70 = const Color(0xB3FFFFFF);
-  late Color primary600 = const Color(0xFF748A2C);
+  late Color primary600 = const Color(0xFF6EF2A9);
   late Color teaGreen = const Color(0xFFCCD5AE);
   late Color beige = const Color(0xFFE9EDC9);
   late Color cornsilk = const Color(0xFFFEFAE0);
   late Color papayaWhip = const Color(0xFFFAEDCD);
   late Color buff = const Color(0xFFD4A373);
+  late Color customColor1 = const Color(0xFF0B06E7);
 }
 
 abstract class Typography {
@@ -590,6 +592,7 @@ class DarkModeTheme extends FlutterFlowTheme {
   late Color cornsilk = const Color(0xFFFEFAE0);
   late Color papayaWhip = const Color(0xFFFAEDCD);
   late Color buff = const Color(0xFFD4A373);
+  late Color customColor1 = const Color(0xFF0B06E7);
 }
 
 extension TextStyleHelper on TextStyle {

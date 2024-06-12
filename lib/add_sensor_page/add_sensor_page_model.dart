@@ -7,28 +7,56 @@ class AddSensorPageModel extends FlutterFlowModel<AddSensorPageWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
-  var serienummer = '';
-  // State field(s) for TextField widget.
-  FocusNode? textFieldFocusNode1;
-  TextEditingController? textController1;
-  String? Function(BuildContext, String?)? textController1Validator;
-  // State field(s) for TextField widget.
-  FocusNode? textFieldFocusNode2;
-  TextEditingController? textController2;
-  String? Function(BuildContext, String?)? textController2Validator;
+  final formKey = GlobalKey<FormState>();
+  var scannedSN = '';
+  // State field(s) for serialTxtBox widget.
+  FocusNode? serialTxtBoxFocusNode;
+  TextEditingController? serialTxtBoxTextController;
+  String? Function(BuildContext, String?)? serialTxtBoxTextControllerValidator;
+  String? _serialTxtBoxTextControllerValidator(
+      BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Udfyld venligst serienummeret.';
+    }
+
+    if (val.length < 6) {
+      return 'Serienummeret er mindst 6 tegn langt.';
+    }
+
+    return null;
+  }
+
+  // State field(s) for roomNameTxtBox widget.
+  FocusNode? roomNameTxtBoxFocusNode;
+  TextEditingController? roomNameTxtBoxTextController;
+  String? Function(BuildContext, String?)?
+      roomNameTxtBoxTextControllerValidator;
+  String? _roomNameTxtBoxTextControllerValidator(
+      BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Navngiv venligst det rum, du placerer sensoren i.';
+    }
+
+    return null;
+  }
+
   // Stores action output result for [Backend Call - API (Create Sensor)] action in Button widget.
   ApiCallResponse? createSensorResult;
 
   @override
-  void initState(BuildContext context) {}
+  void initState(BuildContext context) {
+    serialTxtBoxTextControllerValidator = _serialTxtBoxTextControllerValidator;
+    roomNameTxtBoxTextControllerValidator =
+        _roomNameTxtBoxTextControllerValidator;
+  }
 
   @override
   void dispose() {
     unfocusNode.dispose();
-    textFieldFocusNode1?.dispose();
-    textController1?.dispose();
+    serialTxtBoxFocusNode?.dispose();
+    serialTxtBoxTextController?.dispose();
 
-    textFieldFocusNode2?.dispose();
-    textController2?.dispose();
+    roomNameTxtBoxFocusNode?.dispose();
+    roomNameTxtBoxTextController?.dispose();
   }
 }

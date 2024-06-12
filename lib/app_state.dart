@@ -21,6 +21,9 @@ class FFAppState extends ChangeNotifier {
     _safeInit(() {
       _token = prefs.getString('ff_token') ?? _token;
     });
+    _safeInit(() {
+      _fcmToken = prefs.getString('ff_fcmToken') ?? _fcmToken;
+    });
   }
 
   void update(VoidCallback callback) {
@@ -46,6 +49,13 @@ class FFAppState extends ChangeNotifier {
 
   void updateRoomStruct(Function(RoomStruct) updateFn) {
     updateFn(_room);
+  }
+
+  String _fcmToken = '';
+  String get fcmToken => _fcmToken;
+  set fcmToken(String value) {
+    _fcmToken = value;
+    prefs.setString('ff_fcmToken', value);
   }
 }
 

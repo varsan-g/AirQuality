@@ -152,7 +152,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                       threeColor:
                           FlutterFlowTheme.of(context).secondaryBackground,
                       threeIcon: Icon(
-                        Icons.account_circle_outlined,
+                        Icons.settings_sharp,
                         color: FlutterFlowTheme.of(context).primaryText,
                       ),
                     ),
@@ -173,7 +173,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Velkommen tilbage',
+                                'Velkommen tilbage ${currentUserData?.firstName}!',
                                 style: FlutterFlowTheme.of(context)
                                     .headlineSmall
                                     .override(
@@ -190,7 +190,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                 padding: const EdgeInsetsDirectional.fromSTEB(
                                     0.0, 4.0, 0.0, 0.0),
                                 child: Text(
-                                  'Få et overblik over dine sensorer.',
+                                  'Få et overblik over dine sensorer i ${currentUserData?.institutionName}.',
                                   style: FlutterFlowTheme.of(context)
                                       .bodySmall
                                       .override(
@@ -294,7 +294,10 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    'Se aktuelle live målinger',
+                                                    'Live målinger for ${valueOrDefault<String>(
+                                                      _model.dropDownValue,
+                                                      'Blå stue',
+                                                    )}',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .headlineSmall
@@ -318,10 +321,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                             .fromSTEB(0.0, 4.0,
                                                                 0.0, 0.0),
                                                     child: Text(
-                                                      'for ${valueOrDefault<String>(
-                                                        _model.dropDownValue,
-                                                        'Blå stue',
-                                                      )}',
+                                                      'Luft ud, hvis luftkvaliteten er dårlig.',
                                                       style:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -447,24 +447,47 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                           8.0),
                                                                   child:
                                                                       Container(
-                                                                    width: 30.0,
+                                                                    width: 35.0,
                                                                     height:
-                                                                        30.0,
+                                                                        35.0,
                                                                     decoration:
                                                                         BoxDecoration(
-                                                                      color: valueOrDefault<
-                                                                          Color>(
-                                                                        functions.conditionalColorCO2(SensorGroup
-                                                                            .getSensorDataFromSpecificRoomNameCall
-                                                                            .co2s(
-                                                                              rowGetSensorDataFromSpecificRoomNameResponse.jsonBody,
-                                                                            )!
-                                                                            .last),
-                                                                        FlutterFlowTheme.of(context)
-                                                                            .secondaryText,
+                                                                      gradient:
+                                                                          LinearGradient(
+                                                                        colors: [
+                                                                          valueOrDefault<
+                                                                              Color>(
+                                                                            functions.conditionalColorCO2(SensorGroup.getSensorDataFromSpecificRoomNameCall
+                                                                                .co2s(
+                                                                                  rowGetSensorDataFromSpecificRoomNameResponse.jsonBody,
+                                                                                )!
+                                                                                .last),
+                                                                            FlutterFlowTheme.of(context).secondaryText,
+                                                                          ),
+                                                                          const Color(
+                                                                              0xFF545454)
+                                                                        ],
+                                                                        stops: const [
+                                                                          0.55,
+                                                                          1.0
+                                                                        ],
+                                                                        begin: const AlignmentDirectional(
+                                                                            -0.98,
+                                                                            -1.0),
+                                                                        end: const AlignmentDirectional(
+                                                                            0.98,
+                                                                            1.0),
                                                                       ),
                                                                       shape: BoxShape
                                                                           .circle,
+                                                                      border:
+                                                                          Border
+                                                                              .all(
+                                                                        color: FlutterFlowTheme.of(context)
+                                                                            .primaryText,
+                                                                        width:
+                                                                            2.0,
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                 ),
@@ -563,25 +586,55 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                           8.0,
                                                                           8.0),
                                                                   child:
-                                                                      Container(
-                                                                    width: 30.0,
-                                                                    height:
-                                                                        30.0,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: valueOrDefault<
-                                                                          Color>(
-                                                                        functions.conditionalColorTemperature(SensorGroup
-                                                                            .getSensorDataFromSpecificRoomNameCall
-                                                                            .temperatures(
-                                                                              rowGetSensorDataFromSpecificRoomNameResponse.jsonBody,
-                                                                            )!
-                                                                            .last),
-                                                                        FlutterFlowTheme.of(context)
-                                                                            .secondaryText,
+                                                                      Material(
+                                                                    color: Colors
+                                                                        .transparent,
+                                                                    elevation:
+                                                                        4.0,
+                                                                    shape:
+                                                                        const CircleBorder(),
+                                                                    child:
+                                                                        Container(
+                                                                      width:
+                                                                          35.0,
+                                                                      height:
+                                                                          35.0,
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        gradient:
+                                                                            LinearGradient(
+                                                                          colors: [
+                                                                            valueOrDefault<Color>(
+                                                                              functions.conditionalColorTemperature(SensorGroup.getSensorDataFromSpecificRoomNameCall
+                                                                                  .temperatures(
+                                                                                    rowGetSensorDataFromSpecificRoomNameResponse.jsonBody,
+                                                                                  )!
+                                                                                  .last),
+                                                                              FlutterFlowTheme.of(context).secondaryText,
+                                                                            ),
+                                                                            const Color(0xFF545454)
+                                                                          ],
+                                                                          stops: const [
+                                                                            0.55,
+                                                                            1.0
+                                                                          ],
+                                                                          begin: const AlignmentDirectional(
+                                                                              -0.98,
+                                                                              -1.0),
+                                                                          end: const AlignmentDirectional(
+                                                                              0.98,
+                                                                              1.0),
+                                                                        ),
+                                                                        shape: BoxShape
+                                                                            .circle,
+                                                                        border:
+                                                                            Border.all(
+                                                                          color:
+                                                                              FlutterFlowTheme.of(context).primaryText,
+                                                                          width:
+                                                                              2.0,
+                                                                        ),
                                                                       ),
-                                                                      shape: BoxShape
-                                                                          .circle,
                                                                     ),
                                                                   ),
                                                                 ),
@@ -680,25 +733,55 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                           8.0,
                                                                           8.0),
                                                                   child:
-                                                                      Container(
-                                                                    width: 30.0,
-                                                                    height:
-                                                                        30.0,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: valueOrDefault<
-                                                                          Color>(
-                                                                        functions.conditionalColorHumidity(SensorGroup
-                                                                            .getSensorDataFromSpecificRoomNameCall
-                                                                            .humidities(
-                                                                              rowGetSensorDataFromSpecificRoomNameResponse.jsonBody,
-                                                                            )!
-                                                                            .last),
-                                                                        FlutterFlowTheme.of(context)
-                                                                            .secondaryText,
+                                                                      Material(
+                                                                    color: Colors
+                                                                        .transparent,
+                                                                    elevation:
+                                                                        4.0,
+                                                                    shape:
+                                                                        const CircleBorder(),
+                                                                    child:
+                                                                        Container(
+                                                                      width:
+                                                                          35.0,
+                                                                      height:
+                                                                          35.0,
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        gradient:
+                                                                            LinearGradient(
+                                                                          colors: [
+                                                                            valueOrDefault<Color>(
+                                                                              functions.conditionalColorHumidity(SensorGroup.getSensorDataFromSpecificRoomNameCall
+                                                                                  .humidities(
+                                                                                    rowGetSensorDataFromSpecificRoomNameResponse.jsonBody,
+                                                                                  )!
+                                                                                  .last),
+                                                                              FlutterFlowTheme.of(context).secondaryText,
+                                                                            ),
+                                                                            const Color(0xFF545454)
+                                                                          ],
+                                                                          stops: const [
+                                                                            0.55,
+                                                                            1.0
+                                                                          ],
+                                                                          begin: const AlignmentDirectional(
+                                                                              -0.98,
+                                                                              -1.0),
+                                                                          end: const AlignmentDirectional(
+                                                                              0.98,
+                                                                              1.0),
+                                                                        ),
+                                                                        shape: BoxShape
+                                                                            .circle,
+                                                                        border:
+                                                                            Border.all(
+                                                                          color:
+                                                                              FlutterFlowTheme.of(context).primaryText,
+                                                                          width:
+                                                                              2.0,
+                                                                        ),
                                                                       ),
-                                                                      shape: BoxShape
-                                                                          .circle,
                                                                     ),
                                                                   ),
                                                                 ),
@@ -1118,6 +1201,10 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                     );
                                   },
                                   text: 'Tilføj ny sensor',
+                                  icon: const Icon(
+                                    Icons.add,
+                                    size: 15.0,
+                                  ),
                                   options: FFButtonOptions(
                                     width: double.infinity,
                                     height: 40.0,

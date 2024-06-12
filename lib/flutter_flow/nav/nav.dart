@@ -74,13 +74,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? const NavBarPage() : const SignUpWidget(),
+          appStateNotifier.loggedIn ? const NavBarPage() : const SignInWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? const NavBarPage() : const SignUpWidget(),
+              appStateNotifier.loggedIn ? const NavBarPage() : const SignInWidget(),
           routes: [
             FFRoute(
               name: 'signUp',
@@ -94,7 +94,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             ),
             FFRoute(
               name: 'homePage',
-              path: 'hjem',
+              path: 'home',
               requireAuth: true,
               builder: (context, params) => params.isEmpty
                   ? const NavBarPage(initialPage: 'homePage')
@@ -102,24 +102,30 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             ),
             FFRoute(
               name: 'graphPage',
-              path: 'graf',
+              path: 'graph',
               requireAuth: true,
               builder: (context, params) => params.isEmpty
                   ? const NavBarPage(initialPage: 'graphPage')
                   : const GraphPageWidget(),
             ),
             FFRoute(
-              name: 'profilePage',
-              path: 'profil',
+              name: 'settingsPage',
+              path: 'settings',
               requireAuth: true,
               builder: (context, params) => params.isEmpty
-                  ? const NavBarPage(initialPage: 'profilePage')
-                  : const ProfilePageWidget(),
+                  ? const NavBarPage(initialPage: 'settingsPage')
+                  : const SettingsPageWidget(),
             ),
             FFRoute(
               name: 'addSensorPage',
-              path: 'sensor',
+              path: 'sensor/add',
               builder: (context, params) => const AddSensorPageWidget(),
+            ),
+            FFRoute(
+              name: 'editSensorPage',
+              path: 'sensor/edit',
+              requireAuth: true,
+              builder: (context, params) => const EditSensorPageWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ),
@@ -292,7 +298,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
-            return '/opret';
+            return '/login';
           }
           return null;
         },

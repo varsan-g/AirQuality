@@ -13,11 +13,16 @@ class GraphPageModel extends FlutterFlowModel<GraphPageWidget> {
   // Model for sideBarNav component.
   late SideBarNavModel sideBarNavModel;
   Completer<ApiCallResponse>? apiRequestCompleter;
-  // State field(s) for DropDown widget.
-  String? dropDownValue;
-  FormFieldController<String>? dropDownValueController;
-  // Stores action output result for [Backend Call - API (Get Sensor Data from specific Room name)] action in DropDown widget.
+  // State field(s) for sensorListDropDown widget.
+  String? sensorListDropDownValue;
+  FormFieldController<String>? sensorListDropDownValueController;
+  // Stores action output result for [Backend Call - API (Get Sensor Data from specific Room name)] action in sensorListDropDown widget.
   ApiCallResponse? apiCallResult;
+  // State field(s) for dayDropDown widget.
+  String? dayDropDownValue;
+  FormFieldController<String>? dayDropDownValueController;
+  // Stores action output result for [Backend Call - API (Filter data by hours)] action in dayDropDown widget.
+  ApiCallResponse? hourResult;
 
   @override
   void initState(BuildContext context) {

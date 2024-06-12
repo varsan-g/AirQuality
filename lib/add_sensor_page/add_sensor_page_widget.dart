@@ -3,6 +3,8 @@ import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,15 +28,11 @@ class _AddSensorPageWidgetState extends State<AddSensorPageWidget> {
     super.initState();
     _model = createModel(context, () => AddSensorPageModel());
 
-    _model.textController1 ??= TextEditingController(
-        text: valueOrDefault<String>(
-      _model.serienummer,
-      'N/A',
-    ));
-    _model.textFieldFocusNode1 ??= FocusNode();
+    _model.serialTxtBoxTextController ??= TextEditingController();
+    _model.serialTxtBoxFocusNode ??= FocusNode();
 
-    _model.textController2 ??= TextEditingController();
-    _model.textFieldFocusNode2 ??= FocusNode();
+    _model.roomNameTxtBoxTextController ??= TextEditingController();
+    _model.roomNameTxtBoxFocusNode ??= FocusNode();
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
@@ -105,19 +103,33 @@ class _AddSensorPageWidgetState extends State<AddSensorPageWidget> {
                         const EdgeInsetsDirectional.fromSTEB(0.0, 34.0, 0.0, 0.0),
                     child: FFButtonWidget(
                       onPressed: () async {
+                        var shouldSetState = false;
                         if (isAndroid) {
-                          _model.serienummer =
+                          _model.scannedSN =
                               await FlutterBarcodeScanner.scanBarcode(
                             '#C62828', // scanning line color
                             'Annullér', // cancel button text
                             true, // whether to show the flash icon
                             ScanMode.QR,
                           );
+
+                          shouldSetState = true;
+                          setState(() {
+                            _model.serialTxtBoxTextController?.text =
+                                _model.scannedSN;
+                          });
+                        } else {
+                          if (shouldSetState) setState(() {});
+                          return;
                         }
 
-                        setState(() {});
+                        if (shouldSetState) setState(() {});
                       },
                       text: 'Skan QR kode',
+                      icon: const Icon(
+                        Icons.qr_code,
+                        size: 15.0,
+                      ),
                       options: FFButtonOptions(
                         width: double.infinity,
                         height: 55.0,
@@ -141,127 +153,186 @@ class _AddSensorPageWidgetState extends State<AddSensorPageWidget> {
                       ),
                     ),
                   ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
-                  child: TextFormField(
-                    controller: _model.textController1,
-                    focusNode: _model.textFieldFocusNode1,
-                    onFieldSubmitted: (_) async {
-                      setState(() {
-                        _model.textController1?.text = _model.serienummer;
-                      });
-                    },
-                    autofocus: false,
-                    obscureText: false,
-                    decoration: InputDecoration(
-                      labelText: 'Serienummer',
-                      hintText: 'Indtast serienummeret...',
-                      hintStyle: FlutterFlowTheme.of(context)
-                          .bodyLarge
-                          .override(
-                            fontFamily:
-                                FlutterFlowTheme.of(context).bodyLargeFamily,
-                            letterSpacing: 0.0,
-                            useGoogleFonts: GoogleFonts.asMap().containsKey(
-                                FlutterFlowTheme.of(context).bodyLargeFamily),
+                Form(
+                  key: _model.formKey,
+                  autovalidateMode: AutovalidateMode.disabled,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
+                        child: TextFormField(
+                          controller: _model.serialTxtBoxTextController,
+                          focusNode: _model.serialTxtBoxFocusNode,
+                          onChanged: (_) => EasyDebounce.debounce(
+                            '_model.serialTxtBoxTextController',
+                            const Duration(milliseconds: 2000),
+                            () => setState(() {}),
                           ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: FlutterFlowTheme.of(context).primary,
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0x00000000),
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0x00000000),
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0x00000000),
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily:
-                              FlutterFlowTheme.of(context).bodyMediumFamily,
-                          letterSpacing: 0.0,
-                          useGoogleFonts: GoogleFonts.asMap().containsKey(
-                              FlutterFlowTheme.of(context).bodyMediumFamily),
-                        ),
-                    validator:
-                        _model.textController1Validator.asValidator(context),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
-                  child: TextFormField(
-                    controller: _model.textController2,
-                    focusNode: _model.textFieldFocusNode2,
-                    autofocus: false,
-                    obscureText: false,
-                    decoration: InputDecoration(
-                      labelText: 'Placering',
-                      hintText: 'Indtast navnet på værelset...',
-                      hintStyle: FlutterFlowTheme.of(context)
-                          .bodyLarge
-                          .override(
-                            fontFamily:
-                                FlutterFlowTheme.of(context).bodyLargeFamily,
-                            letterSpacing: 0.0,
-                            useGoogleFonts: GoogleFonts.asMap().containsKey(
-                                FlutterFlowTheme.of(context).bodyLargeFamily),
+                          autofocus: false,
+                          textInputAction: TextInputAction.next,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            labelText: 'Serienummer',
+                            hintText: 'Indtast serienummeret...',
+                            hintStyle: FlutterFlowTheme.of(context)
+                                .bodyLarge
+                                .override(
+                                  fontFamily: FlutterFlowTheme.of(context)
+                                      .bodyLargeFamily,
+                                  letterSpacing: 0.0,
+                                  useGoogleFonts: GoogleFonts.asMap()
+                                      .containsKey(FlutterFlowTheme.of(context)
+                                          .bodyLargeFamily),
+                                ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).primary,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Color(0x00000000),
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Color(0x00000000),
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Color(0x00000000),
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            suffixIcon: _model
+                                    .serialTxtBoxTextController!.text.isNotEmpty
+                                ? InkWell(
+                                    onTap: () async {
+                                      _model.serialTxtBoxTextController
+                                          ?.clear();
+                                      setState(() {});
+                                    },
+                                    child: Icon(
+                                      Icons.clear,
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryText,
+                                      size: 22.0,
+                                    ),
+                                  )
+                                : null,
                           ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: FlutterFlowTheme.of(context).primary,
-                          width: 2.0,
+                          style: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .override(
+                                fontFamily: FlutterFlowTheme.of(context)
+                                    .bodyMediumFamily,
+                                letterSpacing: 0.0,
+                                useGoogleFonts: GoogleFonts.asMap().containsKey(
+                                    FlutterFlowTheme.of(context)
+                                        .bodyMediumFamily),
+                              ),
+                          validator: _model.serialTxtBoxTextControllerValidator
+                              .asValidator(context),
                         ),
-                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0x00000000),
-                          width: 2.0,
+                      Padding(
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
+                        child: TextFormField(
+                          controller: _model.roomNameTxtBoxTextController,
+                          focusNode: _model.roomNameTxtBoxFocusNode,
+                          onChanged: (_) => EasyDebounce.debounce(
+                            '_model.roomNameTxtBoxTextController',
+                            const Duration(milliseconds: 2000),
+                            () => setState(() {}),
+                          ),
+                          autofocus: false,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            labelText: 'Placering',
+                            alignLabelWithHint: false,
+                            hintText: 'Indtast navnet på værelset...',
+                            hintStyle: FlutterFlowTheme.of(context)
+                                .bodyLarge
+                                .override(
+                                  fontFamily: FlutterFlowTheme.of(context)
+                                      .bodyLargeFamily,
+                                  letterSpacing: 0.0,
+                                  useGoogleFonts: GoogleFonts.asMap()
+                                      .containsKey(FlutterFlowTheme.of(context)
+                                          .bodyLargeFamily),
+                                ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).primary,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Color(0x00000000),
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Color(0x00000000),
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Color(0x00000000),
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            suffixIcon: _model.roomNameTxtBoxTextController!
+                                    .text.isNotEmpty
+                                ? InkWell(
+                                    onTap: () async {
+                                      _model.roomNameTxtBoxTextController
+                                          ?.clear();
+                                      setState(() {});
+                                    },
+                                    child: Icon(
+                                      Icons.clear,
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryText,
+                                      size: 22.0,
+                                    ),
+                                  )
+                                : null,
+                          ),
+                          style: FlutterFlowTheme.of(context)
+                              .bodyMedium
+                              .override(
+                                fontFamily: FlutterFlowTheme.of(context)
+                                    .bodyMediumFamily,
+                                letterSpacing: 0.0,
+                                useGoogleFonts: GoogleFonts.asMap().containsKey(
+                                    FlutterFlowTheme.of(context)
+                                        .bodyMediumFamily),
+                              ),
+                          validator: _model
+                              .roomNameTxtBoxTextControllerValidator
+                              .asValidator(context),
                         ),
-                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0x00000000),
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0x00000000),
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          fontFamily:
-                              FlutterFlowTheme.of(context).bodyMediumFamily,
-                          letterSpacing: 0.0,
-                          useGoogleFonts: GoogleFonts.asMap().containsKey(
-                              FlutterFlowTheme.of(context).bodyMediumFamily),
-                        ),
-                    validator:
-                        _model.textController2Validator.asValidator(context),
+                    ],
                   ),
                 ),
                 Padding(
@@ -269,12 +340,17 @@ class _AddSensorPageWidgetState extends State<AddSensorPageWidget> {
                   child: FFButtonWidget(
                     onPressed: () async {
                       var shouldSetState = false;
+                      if (_model.formKey.currentState == null ||
+                          !_model.formKey.currentState!.validate()) {
+                        return;
+                      }
                       var confirmDialogResponse = await showDialog<bool>(
                             context: context,
                             builder: (alertDialogContext) {
                               return AlertDialog(
                                 title: const Text('Er serienummeret korrekt?'),
-                                content: Text(_model.textController1.text),
+                                content: Text(
+                                    _model.serialTxtBoxTextController.text),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(
@@ -292,9 +368,13 @@ class _AddSensorPageWidgetState extends State<AddSensorPageWidget> {
                           ) ??
                           false;
                       _model.createSensorResult = await CreateSensorCall.call(
-                        serialNum: _model.textController1.text,
-                        roomName: _model.textController2.text,
-                        institutionName: 'Sønderborg Børnehave',
+                        serialNum: _model.serialTxtBoxTextController.text,
+                        roomName: valueOrDefault<String>(
+                          functions.capitalizeLetter(
+                              _model.roomNameTxtBoxTextController.text),
+                          'Intet navn',
+                        ),
+                        institutionName: currentUserData?.institutionName,
                         authToken: currentAuthenticationToken,
                       );
                       shouldSetState = true;
@@ -343,6 +423,10 @@ class _AddSensorPageWidgetState extends State<AddSensorPageWidget> {
                       if (shouldSetState) setState(() {});
                     },
                     text: 'Tilføj sensor',
+                    icon: const Icon(
+                      Icons.add,
+                      size: 15.0,
+                    ),
                     options: FFButtonOptions(
                       width: double.infinity,
                       height: 55.0,
