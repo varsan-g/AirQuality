@@ -48,7 +48,7 @@ class FFAppState extends ChangeNotifier {
   }
 
   void updateRoomStruct(Function(RoomStruct) updateFn) {
-    updateFn(_room);
+    updateFn(room);
   }
 
   String _fcmToken = '';

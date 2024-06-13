@@ -20,29 +20,40 @@ class RoomStruct extends BaseStruct {
   List<String>? _co2;
   List<String> get co2 => _co2 ?? const [];
   set co2(List<String>? val) => _co2 = val;
-  void updateCo2(Function(List<String>) updateFn) => updateFn(_co2 ??= []);
+
+  void updateCo2(Function(List<String>) updateFn) {
+    updateFn(co2 ??= []);
+  }
+
   bool hasCo2() => _co2 != null;
 
   // "temperatures" field.
   List<String>? _temperatures;
   List<String> get temperatures => _temperatures ?? const [];
   set temperatures(List<String>? val) => _temperatures = val;
-  void updateTemperatures(Function(List<String>) updateFn) =>
-      updateFn(_temperatures ??= []);
+
+  void updateTemperatures(Function(List<String>) updateFn) {
+    updateFn(temperatures ??= []);
+  }
+
   bool hasTemperatures() => _temperatures != null;
 
   // "humidities" field.
   List<String>? _humidities;
   List<String> get humidities => _humidities ?? const [];
   set humidities(List<String>? val) => _humidities = val;
-  void updateHumidities(Function(List<String>) updateFn) =>
-      updateFn(_humidities ??= []);
+
+  void updateHumidities(Function(List<String>) updateFn) {
+    updateFn(humidities ??= []);
+  }
+
   bool hasHumidities() => _humidities != null;
 
   // "roomName" field.
   String? _roomName;
   String get roomName => _roomName ?? '';
   set roomName(String? val) => _roomName = val;
+
   bool hasRoomName() => _roomName != null;
 
   static RoomStruct fromMap(Map<String, dynamic> data) => RoomStruct(
@@ -67,17 +78,17 @@ class RoomStruct extends BaseStruct {
         'co2': serializeParam(
           _co2,
           ParamType.String,
-          true,
+          isList: true,
         ),
         'temperatures': serializeParam(
           _temperatures,
           ParamType.String,
-          true,
+          isList: true,
         ),
         'humidities': serializeParam(
           _humidities,
           ParamType.String,
-          true,
+          isList: true,
         ),
         'roomName': serializeParam(
           _roomName,

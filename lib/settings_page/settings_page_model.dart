@@ -9,10 +9,6 @@ class SettingsPageModel extends FlutterFlowModel<SettingsPageWidget> {
   final unfocusNode = FocusNode();
   // Model for sideBarNav component.
   late SideBarNavModel sideBarNavModel;
-  // State field(s) for TextField widget.
-  FocusNode? textFieldFocusNode;
-  TextEditingController? textController;
-  String? Function(BuildContext, String?)? textControllerValidator;
 
   @override
   void initState(BuildContext context) {
@@ -23,7 +19,5 @@ class SettingsPageModel extends FlutterFlowModel<SettingsPageWidget> {
   void dispose() {
     unfocusNode.dispose();
     sideBarNavModel.dispose();
-    textFieldFocusNode?.dispose();
-    textController?.dispose();
   }
 }

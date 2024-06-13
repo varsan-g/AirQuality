@@ -117,6 +117,10 @@ class _AddSensorPageWidgetState extends State<AddSensorPageWidget> {
                           setState(() {
                             _model.serialTxtBoxTextController?.text =
                                 _model.scannedSN;
+                            _model.serialTxtBoxTextController?.selection =
+                                TextSelection.collapsed(
+                                    offset: _model.serialTxtBoxTextController!
+                                        .text.length);
                           });
                         } else {
                           if (shouldSetState) setState(() {});

@@ -20,24 +20,28 @@ class UserStruct extends BaseStruct {
   String? _email;
   String get email => _email ?? '';
   set email(String? val) => _email = val;
+
   bool hasEmail() => _email != null;
 
   // "first_name" field.
   String? _firstName;
   String get firstName => _firstName ?? '';
   set firstName(String? val) => _firstName = val;
+
   bool hasFirstName() => _firstName != null;
 
   // "institutionName" field.
   String? _institutionName;
   String get institutionName => _institutionName ?? '';
   set institutionName(String? val) => _institutionName = val;
+
   bool hasInstitutionName() => _institutionName != null;
 
   // "isAdmin" field.
   bool? _isAdmin;
   bool get isAdmin => _isAdmin ?? false;
   set isAdmin(bool? val) => _isAdmin = val;
+
   bool hasIsAdmin() => _isAdmin != null;
 
   static UserStruct fromMap(Map<String, dynamic> data) => UserStruct(
