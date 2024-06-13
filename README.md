@@ -1,7 +1,10 @@
 # AirQual
 
-A new Flutter project.
+## Video af kørende Flutter app
 
-## Getting Started
+https://www.youtube.com/watch?v=aF0wbCyRm6I
 
-FlutterFlow projects are built to run on the Flutter _stable_ release.
+## Video af Push Notifikation implementering
+
+https://github.com/varsan-g/AirQuality/assets/114422072/76056c2e-ca42-438f-85a6-8d65278a79c8
+
