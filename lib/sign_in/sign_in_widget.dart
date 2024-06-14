@@ -1,8 +1,10 @@
 import '/auth/custom_auth/auth_util.dart';
 import '/backend/api_requests/api_calls.dart';
+import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
+import '/custom_code/actions/index.dart' as actions;
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'sign_in_model.dart';
@@ -94,16 +96,11 @@ class _SignInWidgetState extends State<SignInWidget> {
                                     ),
                                   if (Theme.of(context).brightness ==
                                       Brightness.light)
-                                    Align(
-                                      alignment:
-                                          const AlignmentDirectional(-1.0, 0.0),
-                                      child: Image.asset(
-                                        'assets/images/Black_And_White_Aesthetic_Minimalist_Modern_Simple_Typography_Coconut_Cosmetics_Logo.png',
-                                        width: 195.0,
-                                        height: 60.0,
-                                        fit: BoxFit.fitWidth,
-                                        alignment: const Alignment(-1.0, 0.0),
-                                      ),
+                                    Image.asset(
+                                      'assets/images/Black_And_White_Aesthetic_Minimalist_Modern_Simple_Typography_Coconut_Cosmetics_Logo_(1).png',
+                                      width: 150.0,
+                                      height: 55.0,
+                                      fit: BoxFit.fitWidth,
                                     ),
                                 ],
                               ),
@@ -155,6 +152,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                                         controller:
                                             _model.emailAddressTextController,
                                         focusNode: _model.emailAddressFocusNode,
+                                        textInputAction: TextInputAction.next,
                                         obscureText: false,
                                         decoration: InputDecoration(
                                           labelText: 'Email adresse',
@@ -247,6 +245,8 @@ class _SignInWidgetState extends State<SignInWidget> {
                                                               context)
                                                           .bodyMediumFamily),
                                             ),
+                                        keyboardType:
+                                            TextInputType.emailAddress,
                                         validator: _model
                                             .emailAddressTextControllerValidator
                                             .asValidator(context),
@@ -267,6 +267,7 @@ class _SignInWidgetState extends State<SignInWidget> {
                                     child: TextFormField(
                                       controller: _model.passwordTextController,
                                       focusNode: _model.passwordFocusNode,
+                                      textInputAction: TextInputAction.go,
                                       obscureText: !_model.passwordVisibility,
                                       decoration: InputDecoration(
                                         labelText: 'Adgangskode',
@@ -380,53 +381,17 @@ class _SignInWidgetState extends State<SignInWidget> {
                             ),
                             Padding(
                               padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 24.0, 0.0, 0.0),
+                                  0.0, 40.0, 0.0, 0.0),
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  FFButtonWidget(
-                                    onPressed: () {
-                                      print(
-                                          'Button-ForgotPassword pressed ...');
-                                    },
-                                    text: 'Glemt adgangskode?',
-                                    options: FFButtonOptions(
-                                      width: 170.0,
-                                      height: 40.0,
-                                      padding: const EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 0.0, 0.0, 0.0),
-                                      iconPadding:
-                                          const EdgeInsetsDirectional.fromSTEB(
-                                              0.0, 0.0, 0.0, 0.0),
-                                      color: const Color(0x00FFFFFF),
-                                      textStyle: FlutterFlowTheme.of(context)
-                                          .bodySmall
-                                          .override(
-                                            fontFamily:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodySmallFamily,
-                                            letterSpacing: 0.0,
-                                            useGoogleFonts: GoogleFonts.asMap()
-                                                .containsKey(
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodySmallFamily),
-                                          ),
-                                      elevation: 0.0,
-                                      borderSide: const BorderSide(
-                                        color: Colors.transparent,
-                                        width: 1.0,
-                                      ),
-                                    ),
-                                  ),
                                   InkWell(
                                     splashColor: Colors.transparent,
                                     focusColor: Colors.transparent,
                                     hoverColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
                                     onTap: () async {
-                                      Function() navigate = () {};
                                       _model.authResponse =
                                           await LoginCall.call(
                                         email: _model
@@ -438,35 +403,132 @@ class _SignInWidgetState extends State<SignInWidget> {
                                           true)) {
                                         GoRouter.of(context).prepareAuthEvent();
                                         await authManager.signIn(
-                                          authenticationToken: LoginCall.token(
-                                            (_model.authResponse?.jsonBody ??
-                                                ''),
-                                          ),
-                                        );
-                                        navigate = () => context.goNamedAuth(
-                                            'homePage', context.mounted);
-                                      } else {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              'Username or password incorrect.',
-                                              style: TextStyle(
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .primaryText,
-                                              ),
+                                          authenticationToken:
+                                              valueOrDefault<String>(
+                                            LoginCall.token(
+                                              (_model.authResponse?.jsonBody ??
+                                                  ''),
                                             ),
-                                            duration:
-                                                const Duration(milliseconds: 4000),
-                                            backgroundColor:
-                                                FlutterFlowTheme.of(context)
-                                                    .secondary,
+                                            'testAuthLogIn',
+                                          ),
+                                          refreshToken: currentAuthRefreshToken,
+                                          tokenExpiration:
+                                              currentAuthTokenExpiration,
+                                          userData: UserStruct(
+                                            email: LoginCall.email(
+                                              (_model.authResponse?.jsonBody ??
+                                                  ''),
+                                            ),
+                                            firstName: LoginCall.name(
+                                              (_model.authResponse?.jsonBody ??
+                                                  ''),
+                                            ),
+                                            institutionName:
+                                                LoginCall.institutionName(
+                                              (_model.authResponse?.jsonBody ??
+                                                  ''),
+                                            ),
+                                            isAdmin: valueOrDefault<bool>(
+                                              functions.convertStringToBool(
+                                                  valueOrDefault<String>(
+                                                LoginCall.isAdmin(
+                                                  (_model.authResponse
+                                                          ?.jsonBody ??
+                                                      ''),
+                                                ),
+                                                'false',
+                                              )),
+                                              false,
+                                            ),
                                           ),
                                         );
-                                      }
+                                        if (isAndroid) {
+                                          await actions.getPushPermission();
+                                          _model.fcmTokenVar =
+                                              await actions.getFCMToken();
+                                          _model.updateFcmResponse =
+                                              await UpdateFCMTokenCall.call(
+                                            authToken:
+                                                currentAuthenticationToken,
+                                            fcmToken: _model.fcmTokenVar,
+                                          );
+                                          FFAppState().token =
+                                              valueOrDefault<String>(
+                                            LoginCall.token(
+                                              (_model.authResponse?.jsonBody ??
+                                                  ''),
+                                            ),
+                                            'lol',
+                                          );
+                                          FFAppState().fcmToken =
+                                              _model.fcmTokenVar!;
+                                          FFAppState().update(() {});
+                                        } else {
+                                          FFAppState().token =
+                                              valueOrDefault<String>(
+                                            LoginCall.token(
+                                              (_model.authResponse?.jsonBody ??
+                                                  ''),
+                                            ),
+                                            'lol',
+                                          );
+                                          FFAppState().update(() {});
+                                        }
 
-                                      navigate();
+                                        context.pushNamedAuth(
+                                          'homePage',
+                                          context.mounted,
+                                          extra: <String, dynamic>{
+                                            kTransitionInfoKey: const TransitionInfo(
+                                              hasTransition: true,
+                                              transitionType: PageTransitionType
+                                                  .rightToLeft,
+                                            ),
+                                          },
+                                        );
+                                      } else {
+                                        if ((_model.authResponse?.statusCode ??
+                                                200) ==
+                                            503) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                'Vores systemer er nede. Prøv igen senere.',
+                                                style: TextStyle(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                ),
+                                              ),
+                                              duration:
+                                                  const Duration(milliseconds: 4000),
+                                              backgroundColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondary,
+                                            ),
+                                          );
+                                        } else {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                'Dit login er forkert. Prøv igen.',
+                                                style: TextStyle(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryText,
+                                                ),
+                                              ),
+                                              duration:
+                                                  const Duration(milliseconds: 4000),
+                                              backgroundColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondary,
+                                            ),
+                                          );
+                                        }
+                                      }
 
                                       setState(() {});
                                     },
@@ -566,22 +628,31 @@ class _SignInWidgetState extends State<SignInWidget> {
                                     Padding(
                                       padding: const EdgeInsetsDirectional.fromSTEB(
                                           8.0, 8.0, 0.0, 8.0),
-                                      child: Text(
-                                        'Opret en konto',
-                                        style: FlutterFlowTheme.of(context)
-                                            .titleSmall
-                                            .override(
-                                              fontFamily:
-                                                  FlutterFlowTheme.of(context)
-                                                      .titleSmallFamily,
-                                              letterSpacing: 0.0,
-                                              useGoogleFonts: GoogleFonts
-                                                      .asMap()
-                                                  .containsKey(
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleSmallFamily),
-                                            ),
+                                      child: InkWell(
+                                        splashColor: Colors.transparent,
+                                        focusColor: Colors.transparent,
+                                        hoverColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () async {
+                                          context.pushNamed('signUp');
+                                        },
+                                        child: Text(
+                                          'Opret en konto',
+                                          style: FlutterFlowTheme.of(context)
+                                              .titleSmall
+                                              .override(
+                                                fontFamily:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmallFamily,
+                                                letterSpacing: 0.0,
+                                                useGoogleFonts: GoogleFonts
+                                                        .asMap()
+                                                    .containsKey(
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .titleSmallFamily),
+                                              ),
+                                        ),
                                       ),
                                     ),
                                   ],

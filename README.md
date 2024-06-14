@@ -1,4 +1,4 @@
-# AirQual
+# AirQual Monitor
 
 ## Video af kørende Flutter app
 

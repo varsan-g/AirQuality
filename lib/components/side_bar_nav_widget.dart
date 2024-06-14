@@ -88,11 +88,14 @@ class _SideBarNavWidgetState extends State<SideBarNavWidget> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   if (Theme.of(context).brightness == Brightness.light)
-                    Image.asset(
-                      'assets/images/Black_And_White_Aesthetic_Minimalist_Modern_Simple_Typography_Coconut_Cosmetics_Logo_(1).png',
-                      width: 130.0,
-                      height: 40.0,
-                      fit: BoxFit.fitWidth,
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(0.0),
+                      child: Image.asset(
+                        'assets/images/Black_And_White_Aesthetic_Minimalist_Modern_Simple_Typography_Coconut_Cosmetics_Logo_(1).png',
+                        width: 130.0,
+                        height: 40.0,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   if (Theme.of(context).brightness == Brightness.dark)
                     Image.asset(
@@ -192,7 +195,7 @@ class _SideBarNavWidgetState extends State<SideBarNavWidget> {
                 highlightColor: Colors.transparent,
                 onTap: () async {
                   context.pushNamed(
-                    'profilePage',
+                    'settingsPage',
                     extra: <String, dynamic>{
                       kTransitionInfoKey: const TransitionInfo(
                         hasTransition: true,

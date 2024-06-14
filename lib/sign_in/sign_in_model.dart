@@ -18,6 +18,10 @@ class SignInModel extends FlutterFlowModel<SignInWidget> {
   String? Function(BuildContext, String?)? passwordTextControllerValidator;
   // Stores action output result for [Backend Call - API (Login)] action in card_ActiveUsers widget.
   ApiCallResponse? authResponse;
+  // Stores action output result for [Custom Action - getFCMToken] action in card_ActiveUsers widget.
+  String? fcmTokenVar;
+  // Stores action output result for [Backend Call - API (Update FCM Token)] action in card_ActiveUsers widget.
+  ApiCallResponse? updateFcmResponse;
 
   @override
   void initState(BuildContext context) {

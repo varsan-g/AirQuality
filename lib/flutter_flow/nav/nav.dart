@@ -2,14 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '/backend/backend.dart';
+
 import '/backend/schema/structs/index.dart';
 
 import '/auth/custom_auth/custom_auth_user_provider.dart';
 
 import '/index.dart';
 import '/main.dart';
-import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 export 'package:go_router/go_router.dart';
@@ -23,8 +22,8 @@ class AppStateNotifier extends ChangeNotifier {
   static AppStateNotifier? _instance;
   static AppStateNotifier get instance => _instance ??= AppStateNotifier._();
 
-  AirQualAuthUser? initialUser;
-  AirQualAuthUser? user;
+  AirQualMonitorAuthUser? initialUser;
+  AirQualMonitorAuthUser? user;
   bool showSplashImage = true;
   String? _redirectLocation;
 
@@ -49,7 +48,7 @@ class AppStateNotifier extends ChangeNotifier {
   /// to perform subsequent actions (such as navigation) afterwards.
   void updateNotifyOnAuthChange(bool notify) => notifyOnAuthChange = notify;
 
-  void update(AirQualAuthUser newUser) {
+  void update(AirQualMonitorAuthUser newUser) {
     final shouldUpdate =
         user?.uid == null || newUser.uid == null || user?.uid != newUser.uid;
     initialUser ??= newUser;
@@ -75,54 +74,58 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? const NavBarPage() : const SignUpWidget(),
+          appStateNotifier.loggedIn ? const NavBarPage() : const SignInWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? const NavBarPage() : const SignUpWidget(),
+              appStateNotifier.loggedIn ? const NavBarPage() : const SignInWidget(),
           routes: [
             FFRoute(
-              name: 'signIn',
-              path: 'signIn',
-              builder: (context, params) => const SignInWidget(),
-            ),
-            FFRoute(
               name: 'signUp',
-              path: 'signUp',
+              path: 'opret',
               builder: (context, params) => const SignUpWidget(),
             ),
             FFRoute(
-              name: 'createProfile',
-              path: 'createProfile',
-              builder: (context, params) => const CreateProfileWidget(),
-            ),
-            FFRoute(
-              name: 'forgotPassword',
-              path: 'forgotPassword',
-              builder: (context, params) => const ForgotPasswordWidget(),
+              name: 'signIn',
+              path: 'login',
+              builder: (context, params) => const SignInWidget(),
             ),
             FFRoute(
               name: 'homePage',
-              path: 'homePage',
+              path: 'home',
+              requireAuth: true,
               builder: (context, params) => params.isEmpty
                   ? const NavBarPage(initialPage: 'homePage')
                   : const HomePageWidget(),
             ),
             FFRoute(
               name: 'graphPage',
-              path: 'graphPage',
+              path: 'graph',
+              requireAuth: true,
               builder: (context, params) => params.isEmpty
                   ? const NavBarPage(initialPage: 'graphPage')
                   : const GraphPageWidget(),
             ),
             FFRoute(
-              name: 'profilePage',
-              path: 'profilePage',
+              name: 'settingsPage',
+              path: 'settings',
+              requireAuth: true,
               builder: (context, params) => params.isEmpty
-                  ? const NavBarPage(initialPage: 'profilePage')
-                  : const ProfilePageWidget(),
+                  ? const NavBarPage(initialPage: 'settingsPage')
+                  : const SettingsPageWidget(),
+            ),
+            FFRoute(
+              name: 'addSensorPage',
+              path: 'sensor/add',
+              builder: (context, params) => const AddSensorPageWidget(),
+            ),
+            FFRoute(
+              name: 'editSensorPage',
+              path: 'sensor/edit',
+              requireAuth: true,
+              builder: (context, params) => const EditSensorPageWidget(),
             )
           ].map((r) => r.toRoute(appStateNotifier)).toList(),
         ),
@@ -243,7 +246,6 @@ class FFParameters {
     String paramName,
     ParamType type, {
     bool isList = false,
-    List<String>? collectionNamePath,
     StructBuilder<T>? structBuilder,
   }) {
     if (futureParamValues.containsKey(paramName)) {
@@ -262,7 +264,6 @@ class FFParameters {
       param,
       type,
       isList,
-      collectionNamePath: collectionNamePath,
       structBuilder: structBuilder,
     );
   }
@@ -297,7 +298,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
-            return '/signUp';
+            return '/login';
           }
           return null;
         },
@@ -311,15 +312,11 @@ class FFRoute {
                 )
               : builder(context, ffParams);
           final child = appStateNotifier.loading
-              ? Center(
-                  child: SizedBox(
-                    width: 50.0,
-                    height: 50.0,
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        FlutterFlowTheme.of(context).primary,
-                      ),
-                    ),
+              ? Container(
+                  color: Colors.transparent,
+                  child: Image.asset(
+                    'assets/images/Black_And_White_Aesthetic_Minimalist_Modern_Simple_Typography_Coconut_Cosmetics_Logo.png',
+                    fit: BoxFit.contain,
                   ),
                 )
               : page;
