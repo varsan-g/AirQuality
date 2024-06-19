@@ -2,7 +2,7 @@
 
 ## Video af kørende Flutter app
 
-https://www.youtube.com/watch?v=aF0wbCyRm6I
+https://github.com/varsan-g/AirQuality/assets/114422072/603dfcc9-f69a-417e-9fa6-5f8b0e3369ad
 
 ## Video af Push Notifikation implementering
 
